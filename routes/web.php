@@ -19,13 +19,14 @@ use App\Http\Controllers\Admin\PpmpProjectStatusController;
 use App\Http\Controllers\Admin\ProjectTypeController;
 use App\Http\Controllers\Admin\PpmpProjectCategoryController;
 use App\Http\Controllers\Admin\AppProjectStatusController;
-use App\Http\Controllers\Admin\AppController;
 use App\Http\Controllers\Admin\AppStatusController;
 use App\Http\Controllers\Admin\ModeOfProcurementController;
 
 use App\Http\Controllers\Head\PPMPController;
 use App\Http\Controllers\Head\PpmpProjectController;
 use App\Http\Controllers\Head\AppProjectController;
+
+use App\Http\Controllers\BacSec\AppController;
 
 
 
@@ -105,6 +106,7 @@ Route::prefix('head')->name('head.')->group(function () {
 
 // Bac Sec Management Routes
 Route::prefix('bacsec')->name('bacsec.')->group(function (){
+    Route::resource('app', AppController::class);
    
 
 });;

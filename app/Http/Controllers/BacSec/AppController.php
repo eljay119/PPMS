@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\BacSec;
 
 use App\Http\Controllers\Controller;
 use App\Models\App;
@@ -19,7 +19,7 @@ class AppController extends Controller
     public function index()
     {
         $apps = App::with('appProjects')->get();
-        return view('admin.apps.index', compact('apps'));
+        return view('bacsec.app.index', compact('apps'));
     }
 
     // Show the form for creating a new APP record
@@ -28,7 +28,7 @@ class AppController extends Controller
         $statuses = AppProjectStatus::all();
         $users = User::all(); // Fetch users for 'prepared_by' field
 
-        return view('admin.apps.create', compact('statuses', 'users'));
+        return view('bacsec.app.create', compact('statuses', 'users'));
     }
 
     // Store a newly created APP record
@@ -43,13 +43,13 @@ class AppController extends Controller
 
         App::create($request->all());
 
-        return redirect()->route('admin.apps.index')->with('success', 'APP record created successfully!');
+        return redirect()->route('basec.app.index')->with('success', 'APP record created successfully!');
     }
 
     // Show a specific APP record
     public function show(App $app)
     {
-        return view('admin.apps.show', compact('app'));
+        return view('bacsec.app.show', compact('app'));
     }
 
     // Show the form for editing an APP record
@@ -58,7 +58,7 @@ class AppController extends Controller
         $statuses = AppProjectStatus::all();
         $users = User::all(); 
 
-        return view('admin.apps.edit', compact('app', 'statuses', 'users'));
+        return view('bacsec.app.edit', compact('app', 'statuses', 'users'));
     }
 
     // Update an APP record
@@ -73,13 +73,13 @@ class AppController extends Controller
 
         $app->update($request->all());
 
-        return redirect()->route('admin.apps.index')->with('success', 'APP record updated successfully!');
+        return redirect()->route('bacsec.app.index')->with('success', 'APP record updated successfully!');
     }
 
     // Delete an APP record
     public function destroy(App $app)
     {
         $app->delete();
-        return redirect()->route('admin.apps.index')->with('success', 'APP record deleted successfully!');
+        return redirect()->route('bacsec.app.index')->with('success', 'APP record deleted successfully!');
     }
 }
