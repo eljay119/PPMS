@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\BacSec;
 
 use App\Http\Controllers\Controller;
 use App\Models\AppProjectStatus;
@@ -17,13 +17,20 @@ class AppProjectStatusController extends Controller
     public function index()
     {
         $statuses = AppProjectStatus::all();
-        return view('admin.app_project_statuses.index', compact('statuses'));
+        return view('bacsec.app_project_statuses.index', compact('statuses'));
     }
+
+    public function show($id)
+    {
+        $status = AppProjectStatus::findOrFail($id);
+        return view('bacsec.app_project_statuses.show', compact('status'));
+    }
+
 
     // Show the form for creating a new project status
     public function create()
     {
-        return view('admin.app_project_statuses.create');
+        return view('bacsec.app_project_statuses.create');
     }
 
     // Store a newly created project status
@@ -36,13 +43,13 @@ class AppProjectStatusController extends Controller
 
         AppProjectStatus::create($request->all());
 
-        return redirect()->route('admin.app_project_statuses.index')->with('success', 'App Project Status created successfully!');
+        return redirect()->route('bacsec.app_project_statuses.index')->with('success', 'App Project Status created successfully!');
     }
 
     // Show the form for editing a project status
     public function edit(AppProjectStatus $appProjectStatus)
     {
-        return view('admin.app_project_statuses.edit', compact('appProjectStatus'));
+        return view('bacsec.app_project_statuses.edit', compact('appProjectStatus'));
     }
 
     // Update a project status
@@ -55,7 +62,7 @@ class AppProjectStatusController extends Controller
 
         $appProjectStatus->update($request->all());
 
-        return redirect()->route('admin.app_project_statuses.index')->with('success', 'App Project Status updated successfully!');
+        return redirect()->route('bacsec.app_project_statuses.index')->with('success', 'App Project Status updated successfully!');
     }
 
     // Delete a project status
@@ -63,6 +70,6 @@ class AppProjectStatusController extends Controller
     {
         $appProjectStatus->delete();
 
-        return redirect()->route('admin.app_project_statuses.index')->with('success', 'App Project Status deleted successfully!');
+        return redirect()->route('bacsec.app_project_statuses.index')->with('success', 'App Project Status deleted successfully!');
     }
 }

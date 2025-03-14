@@ -95,7 +95,7 @@
                         <nav class="sb-sidenav-menu-nested nav">
                             <a class="nav-link text-white hover:bg-dark" href="{{ route('bacsec.app.index') }}">APP</a>
                             <a class="nav-link text-white hover:bg-dark" href="{{ route('bacsec.app_projects.index') }}">APP Projects</a>
-                            <a class="nav-link text-white" href="/">Project Status</a>
+                            <a class="nav-link text-white" href="{{ route('bacsec.app_project_statuses.index') }}">Project Status</a>
                         </nav>
                     </div>
                 @endif

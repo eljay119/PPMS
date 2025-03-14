@@ -18,7 +18,6 @@ use App\Http\Controllers\Admin\PpmpStatusController;
 use App\Http\Controllers\Admin\PpmpProjectStatusController;
 use App\Http\Controllers\Admin\ProjectTypeController;
 use App\Http\Controllers\Admin\PpmpProjectCategoryController;
-use App\Http\Controllers\Admin\AppProjectStatusController;
 use App\Http\Controllers\Admin\AppStatusController;
 use App\Http\Controllers\Admin\ModeOfProcurementController;
 
@@ -28,6 +27,7 @@ use App\Http\Controllers\Head\AppProjectController;
 
 use App\Http\Controllers\BacSec\AppController;
 use App\Http\Controllers\BacSec\AppProject2Controller;
+use App\Http\Controllers\BacSec\AppProjectStatusController;
 
 
 
@@ -88,7 +88,6 @@ Route::prefix('admin')->middleware(['auth', CheckRole::class . ':admin'])->group
     Route::resource('ppmp_project_statuses', PpmpProjectStatusController::class)->names('admin.ppmp_project_statuses');
     Route::resource('officeTypes', OfficeTypeController::class);
     Route::resource('source_of_funds', SourceOfFundController::class);
-    Route::resource('app_project_statuses', AppProjectStatusController::class);
     Route::resource('apps', AppController::class);
     Route::resource('app_statuses', AppStatusController::class);
     Route::resource('mode_of_procurements', ModeOfProcurementController::class);
@@ -106,11 +105,18 @@ Route::prefix('head')->name('head.')->group(function () {
 });;
 
 // Bac Sec Management Routes
-Route::prefix('bacsec')->name('bacsec.')->group(function (){
-    Route::resource('app', AppController::class);
-    Route::resource('app_projects', AppProject2Controller::class);
+Route::prefix('bacsec')->name('bacsec.')->group(function () {
+    Route::get('app', [AppController::class, 'index'])->name('app.index');
 
+    // App Projects
+    Route::get('app_projects', [AppProject2Controller::class, 'index'])->name('app_projects.index');
+
+    // App Project Statuses
+    Route::resource('app_project_statuses', AppProjectStatusController::class)->except(['show']);
+    Route::get('app_project_statuses/{id}', [AppProjectStatusController::class, 'show'])
+        ->name('app_project_statuses.show');
 });
+
 
 
 // Profile Management Routes
