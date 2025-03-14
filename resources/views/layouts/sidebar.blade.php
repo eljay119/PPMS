@@ -100,6 +100,33 @@
                     </div>
                 @endif
 
+
+                <!-- BUDGET OFFICER SECTION ONLY -->
+                @if(Auth::user() && Auth::user()->role_id == 4)
+                    <div class="sb-sidenav-menu-heading text-white">Budget Officer Management</div>
+
+                    <a class="nav-link text-white" href="{{ route('budget_officer.submitted_projects.index') }}">
+                        <i class="fas fa-folder-open me-2"></i> Submitted APP Projects
+                    </a>
+                    <a class="nav-link text-white" href="{{ route('budget_officer.certified_projects.index') }}">
+                        <i class="fas fa-file-signature me-2"></i> Certified APP Projects
+                    </a>
+                @endif
+
+
+                <!-- CAMPUS DIRECTOR SECTION ONLY -->
+                @if(Auth::user() && Auth::user()->role_id == 5)
+                    <div class="sb-sidenav-menu-heading text-white">Campus Director Management</div>
+
+                    <a class="nav-link text-white" href="{{ route('campus_director.certified_project.index') }}">
+                        <i class="fas fa-file-signature me-2"></i> Certified APP Projects
+                    </a>
+                    <a class="nav-link text-white" href="{{ route('campus_director.endorsed_projects.index') }}">
+                        <i class="fas fa-folder-open me-2"></i> Endorsed APP Projects
+                    </a>
+                @endif
+
+
             </div>
         </div>
     </nav>

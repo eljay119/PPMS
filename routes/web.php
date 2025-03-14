@@ -29,6 +29,10 @@ use App\Http\Controllers\BacSec\AppController;
 use App\Http\Controllers\BacSec\AppProject2Controller;
 use App\Http\Controllers\BacSec\AppProjectStatusController;
 
+use App\Http\Controllers\BudgetOfficer\AppProject3Controller;
+
+use App\Http\Controllers\CampusDirector\AppProject4Controller;
+
 
 
 use App\Http\Middleware\CheckRole;
@@ -116,6 +120,28 @@ Route::prefix('bacsec')->name('bacsec.')->group(function () {
     Route::get('app_project_statuses/{id}', [AppProjectStatusController::class, 'show'])
         ->name('app_project_statuses.show');
 });
+
+
+// Budget Officer Management Routes
+Route::prefix('budget_officer')->name('budget_officer.')->group(function () {
+    Route::get('submitted_projects', [AppProject3Controller::class, 'index'])->name('submitted_projects.index');
+    Route::get('certified_projects', [AppProject3Controller::class, 'index'])->name('certified_projects.index');
+
+});
+
+
+// Campus Director Management Routes
+Route::prefix('campus_director')->name('campus_director.')->group(function () {
+    Route::get('certified_project', [AppProject4Controller::class, 'index'])->name('certified_project.index');
+    Route::get('endorsed_projects', [AppProject4Controller::class, 'index'])->name('endorsed_projects.index');
+
+});
+
+
+
+
+
+
 
 
 
