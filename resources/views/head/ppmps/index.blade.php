@@ -17,20 +17,16 @@
             <table class="table table-striped table-bordered text-center align-middle">
                 <thead class="table-dark">
                     <tr>
-                        <th>#</th>
                         <th>Fiscal Year</th>
                         <th>Fund Source</th>
-                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($ppmps as $ppmp)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $ppmp->fiscal_year }}</td>
                         <td>{{ $ppmp->sourceOfFund->name ?? 'No Fund Source' }}</td>
-                        <td>{{ $ppmp->ppmpStatus->name ?? 'No Status' }}</td>
                         <td class="text-center">
                             <div class="btn-group">
                                 <!-- View Icon -->
@@ -43,10 +39,8 @@
                                 <button type="button" class="btn btn-warning btn-sm edit-ppmp mx-1" 
                                     data-bs-toggle="modal" 
                                     data-bs-target="#ppmpModal"
-                                    data-id="{{ $ppmp->id }}"
                                     data-fiscal_year="{{ $ppmp->fiscal_year }}"
-                                    data-fund_source="{{ $ppmp->source_of_fund_id }}"
-                                    data-status="{{ $ppmp->ppmp_status_id }}">
+                                    data-fund_source="{{ $ppmp->source_of_fund_id }}">
                                     <i class="bi bi-pencil-square"></i> 
                                 </button>
 
@@ -104,17 +98,7 @@
                             @endforeach
                         </select>
                     </div>
-
-                    <!-- Status Dropdown -->
-                    <div class="mb-3">
-                        <label for="ppmp_status_id" class="form-label">Status</label>
-                        <select id="ppmp_status_id" name="ppmp_status_id" class="form-select">
-                            @foreach($statuses as $status)
-                                <option value="{{ $status->id }}">{{ $status->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
+                    
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-success">Save PPMP</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
