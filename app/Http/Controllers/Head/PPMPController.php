@@ -28,9 +28,8 @@ class PPMPController extends Controller
     {
         $ppmps = PPMP::with(['sourceOfFund', 'ppmpStatus', 'office'])->get();
         $fundSources = SourceOfFund::all();
-        $statuses = PpmpStatus::all();
 
-        return view('head.ppmps.index', compact('ppmps', 'fundSources', 'statuses'));
+        return view('head.ppmps.index', compact('ppmps', 'fundSources',));
     }
 
     public function store(Request $request)
@@ -39,7 +38,6 @@ class PPMPController extends Controller
             $request->validate([
                 'fiscal_year' => 'required|integer',
                 'source_of_fund_id' => 'required|exists:source_of_funds,id',
-                'ppmp_status_id' => 'required|exists:ppmp_statuses,id',
                 'office_id' => 'nullable|integer',
             ]);
 
@@ -54,7 +52,6 @@ class PPMPController extends Controller
             PPMP::create([
                 'fiscal_year' => $request->fiscal_year,
                 'source_of_fund_id' => $request->source_of_fund_id,
-                'ppmp_status_id' => $request->ppmp_status_id,
                 'office_id' => $officeId,
             ]);
 
@@ -71,14 +68,12 @@ class PPMPController extends Controller
         $request->validate([
             'fiscal_year' => 'required|integer',
             'source_of_fund_id' => 'required|exists:source_of_funds,id',
-            'ppmp_status_id' => 'required|exists:ppmp_statuses,id',
         ]);
 
         $ppmp = PPMP::findOrFail($id);
         $ppmp->update([
             'fiscal_year' => $request->fiscal_year,
             'source_of_fund_id' => $request->source_of_fund_id,
-            'ppmp_status_id' => $request->ppmp_status_id,
         ]);
 
         return redirect()->route('head.ppmps.index')->with('success', 'PPMP updated successfully.');

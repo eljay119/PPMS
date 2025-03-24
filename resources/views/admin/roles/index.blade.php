@@ -27,7 +27,7 @@
                     @foreach($roles as $role)
                     <tr>
                         <td>{{ $role->id }}</td>
-                        <td>{{ $role_id->name }}</td>
+                        <td>{{ $role->name }}</td>
                         <td>{{ $role->description }}</td>
                         <td class="d-flex gap-2">
                         <button type="button" class="btn btn-warning btn-sm edit-role" data-bs-toggle="modal" data-bs-target="#roleModal" 

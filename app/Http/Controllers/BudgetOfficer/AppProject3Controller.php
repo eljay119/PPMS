@@ -23,7 +23,7 @@ class AppProject3Controller extends Controller
     {
         $projects = AppProject::with(['app', 'category', 'status', 'fund', 'endUser'])->get();
 
-        return view('budget_officer.certified_project.index', compact('projects'));
+        return view('budget_officer.certified_projects.index', compact('projects'));
     }
 
     // Show the form for creating a new APP Project
@@ -35,7 +35,7 @@ class AppProject3Controller extends Controller
         $funds = SourceOfFund::all();
         $users = User::all();
 
-        return view('budget_officer.certified_project.create', compact('apps', 'categories', 'statuses', 'funds', 'users'));
+        return view('budget_officer.certified_projects.create', compact('apps', 'categories', 'statuses', 'funds', 'users'));
     }
 
     // Store a newly created APP Project
@@ -56,13 +56,13 @@ class AppProject3Controller extends Controller
 
         AppProject::create($request->all());
 
-        return redirect()->route('budget_officer.certified_project.index')->with('success', 'APP Project created successfully!');
+        return redirect()->route('budget_officer.certified_projects.index')->with('success', 'APP Project created successfully!');
     }
 
     // Show a specific APP Project
     public function show(AppProject $appProject)
     {
-        return view('budget_officer.certified_project.show', compact('appProject'));
+        return view('budget_officer.certified_projects.show', compact('appProject'));
     }
 
     // Show the form for editing an APP Project
@@ -74,7 +74,7 @@ class AppProject3Controller extends Controller
         $funds = SourceOfFund::all();
         $users = User::all();
 
-        return view('budget_officer.certified_project.edit', compact('appProject', 'apps', 'categories', 'statuses', 'funds', 'users'));
+        return view('budget_officer.certified_projects.edit', compact('appProject', 'apps', 'categories', 'statuses', 'funds', 'users'));
     }
 
     // Update an APP Project
@@ -95,13 +95,13 @@ class AppProject3Controller extends Controller
 
         $appProject->update($request->all());
 
-        return redirect()->route('budget_officer.certified_project.index')->with('success', 'APP Project updated successfully!');
+        return redirect()->route('budget_officer.certified_projects.index')->with('success', 'APP Project updated successfully!');
     }
 
     // Delete an APP Project
     public function destroy(AppProject $appProject)
     {
         $appProject->delete();
-        return redirect()->route('budget_officer.certified_project.index')->with('success', 'APP Project deleted successfully!');
+        return redirect()->route('budget_officer.certified_projects.index')->with('success', 'APP Project deleted successfully!');
     }
 }

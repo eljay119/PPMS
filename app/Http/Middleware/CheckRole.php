@@ -13,19 +13,22 @@ class CheckRole
         if (!Auth::check()) {
             abort(403, 'Unauthorized: User not logged in.');
         }
-
+    
         $user = Auth::user();
-
+    
         if (!$user->role) {
             dd("User has no role!", $user);
         }
-
-        $userRole = $user->role->name;
-
-        if ($userRole !== $role) {
-            abort(403, 'Unauthorized: Insufficient role.');
+    
+        // Normalize both sides (remove extra spaces and lowercase)
+        $userRole = strtolower(trim($user->role->name));
+        $requiredRole = strtolower(trim($role));
+    
+        if ($userRole !== $requiredRole) {
+            abort(403, "Unauthorized: Role mismatch. User role is '$userRole', required is '$requiredRole'");
         }
-
+    
         return $next($request);
     }
+    
 }

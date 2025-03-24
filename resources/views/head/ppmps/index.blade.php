@@ -39,6 +39,7 @@
                                 <button type="button" class="btn btn-warning btn-sm edit-ppmp mx-1" 
                                     data-bs-toggle="modal" 
                                     data-bs-target="#ppmpModal"
+                                    data-id="{{ $ppmp->id }}"
                                     data-fiscal_year="{{ $ppmp->fiscal_year }}"
                                     data-fund_source="{{ $ppmp->source_of_fund_id }}">
                                     <i class="bi bi-pencil-square"></i> 
@@ -120,7 +121,6 @@
             <div class="modal-body">
                 <p><strong>Fiscal Year:</strong> <span id="view_fiscal_year"></span></p>
                 <p><strong>Fund Source:</strong> <span id="view_fund_source"></span></p>
-                <p><strong>Status:</strong> <span id="view_status"></span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -151,13 +151,20 @@
 <!-- JavaScript for Edit & View Modals -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        // Add PPMP Button - Reset Form
+        document.getElementById("addppmpBtn").addEventListener("click", function () {
+            document.getElementById("ppmpForm").reset();
+            document.getElementById("formMethod").value = "POST"; 
+            document.getElementById("ppmpForm").setAttribute("action", "{{ route('head.ppmps.store') }}");
+            document.querySelector(".modal-title").textContent = "Add New PPMP";
+        });
+
         // Edit PPMP
         document.querySelectorAll(".edit-ppmp").forEach(button => {
             button.addEventListener("click", function () {
                 document.getElementById("ppmpId").value = this.getAttribute("data-id");
                 document.getElementById("fiscal_year").value = this.getAttribute("data-fiscal_year");
                 document.getElementById("source_of_fund_id").value = this.getAttribute("data-fund_source");
-                document.getElementById("ppmp_status_id").value = this.getAttribute("data-status");
                 document.querySelector(".modal-title").textContent = "Edit PPMP";
                 document.getElementById("formMethod").value = "PUT";
                 document.getElementById("ppmpForm").setAttribute("action", "/head/ppmps/" + this.getAttribute("data-id"));

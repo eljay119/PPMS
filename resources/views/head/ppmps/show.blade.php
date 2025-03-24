@@ -67,8 +67,15 @@
                                 <td>{{ $project->appProject->name ?? 'N/A' }}</td>
                                 <td>{{ $project->pmo_end_user ?? 'N/A' }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-warning">Edit</a>
-                                    <a href="#" class="btn btn-danger">Delete</a>
+                                      <!-- Edit Button triggers modal -->
+                                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editProjectModal{{ $project->id }}">Edit</button>
+
+                                    <!-- Delete Form -->
+                                    <form action="{{ route('head.ppmp_projects.destroy', $project->id) }}" method="POST" style="display:inline-block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
                                 </td>
                             </tr>
                         @empty
@@ -139,11 +146,80 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save Project</button>
                 </div>
             </form>
         </div>
     </div>
+</div> 
+
+@foreach($ppmp->ppmpProjects as $project)
+<!-- Edit Project Modal -->
+<div class="modal fade" id="editProjectModal{{ $project->id }}" tabindex="-1" aria-labelledby="editProjectModalLabel{{ $project->id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{ route('head.ppmp_projects.update', $project->id) }}" method="POST" class="modal-content">
+            @csrf
+            @method('PUT')
+            <input type="hidden" name="ppmp_id" value="{{ $ppmp->id }}">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProjectModalLabel{{ $project->id }}">Edit Project</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Project Title</label>
+                    <input type="text" class="form-control" name="title" value="{{ $project->title }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="amount" class="form-label">Amount</label>
+                    <input type="number" step="0.01" class="form-control" name="amount" value="{{ $project->amount }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" name="category_id" required>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ $project->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Mode of Procurement</label>
+                    <select class="form-select" name="mode_of_procurement_id" required>
+                        @foreach($modes as $mode)
+                            <option value="{{ $mode->id }}" {{ $project->mode_of_procurement_id == $mode->id ? 'selected' : '' }}>{{ $mode->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Type</label>
+                    <select class="form-select" name="type_id" required>
+                        @foreach($projectTypes as $type)
+                            <option value="{{ $type->id }}" {{ $project->type_id == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" name="status_id" required>
+                        @foreach($statuses as $status)
+                            <option value="{{ $status->id }}" {{ $project->status_id == $status->id ? 'selected' : '' }}>{{ $status->status }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">PMO/End User</label>
+                    <input type="text" class="form-control" name="pmo_end_user" value="{{ $project->pmo_end_user }}">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
 </div>
+@endforeach
+
+
 @endsection

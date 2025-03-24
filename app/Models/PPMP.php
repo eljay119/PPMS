@@ -8,7 +8,7 @@ class PPMP extends Model
 {
     protected $table = 'ppmps';
     
-    protected $fillable = ['fiscal_year', 'source_of_fund_id', 'ppmp_status_id', 'office_id', 'type_id'];
+    protected $fillable = ['fiscal_year', 'source_of_fund_id', 'office_id', 'type_id'];
 
     public function sourceofFund()
     {

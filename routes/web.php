@@ -33,9 +33,8 @@ use App\Http\Controllers\BudgetOfficer\AppProject3Controller;
 
 use App\Http\Controllers\CampusDirector\AppProject4Controller;
 
-
-
 use App\Http\Middleware\CheckRole;
+
 
 // Public Route
 Route::get('/', function () {
@@ -106,6 +105,11 @@ Route::prefix('head')->name('head.')->group(function () {
     Route::resource('ppmp_projects', PpmpProjectController::class)->except(['index']);
     Route::get('/app-projects', [AppProjectController::class, 'index'])->name('app_projects.index');
 
+Route::prefix('head')->name('head.')->middleware(['auth'])->group(function () {
+    Route::resource('ppmp_projects', PpmpProjectController::class)->except(['create', 'show']);
+
+});
+    
 });;
 
 // Bac Sec Management Routes
@@ -136,13 +140,6 @@ Route::prefix('campus_director')->name('campus_director.')->group(function () {
     Route::get('endorsed_projects', [AppProject4Controller::class, 'index'])->name('endorsed_projects.index');
 
 });
-
-
-
-
-
-
-
 
 
 // Profile Management Routes
