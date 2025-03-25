@@ -84,9 +84,9 @@ class PpmpProjectController extends Controller
 
     public function edit($id)
     {
-        $project = PpmpProject::findOrFail($id);
-
-        return view('head.ppmp_projects.edit', [
+        $project = PpmpProject::with(['category', 'modeOfProcurement', 'status', 'type', 'appProject'])->findOrFail($id);
+    
+        return response()->json([
             'project' => $project,
             'categories' => PpmpProjectCategory::all(),
             'modes' => ModeOfProcurement::all(),
@@ -95,6 +95,8 @@ class PpmpProjectController extends Controller
             'appProjects' => AppProject::all(),
         ]);
     }
+    
+    
 
     public function update(Request $request, $id)
     {
@@ -113,17 +115,20 @@ class PpmpProjectController extends Controller
         $project = PpmpProject::findOrFail($id);
         $project->update($validated);
 
-        return redirect()->route('head.ppmp_projects.index', $project->ppmp_id)
+        return redirect()->route('head.ppmps.show', $project->ppmp_id)
                          ->with('success', 'PPMP Project updated successfully!');
+
     }
 
     public function destroy($id)
     {
         $project = PpmpProject::findOrFail($id);
-        $ppmp_id = $project->ppmp_id; // Get before deleting
+        $ppmp_id = $project->ppmp_id; 
         $project->delete();
 
-        return redirect()->route('head.ppmp_projects.index', $ppmp_id)
+        return redirect()->route('head.ppmps.show', $ppmp_id)
                          ->with('success', 'PPMP Project deleted successfully!');
+
     }
+    
 }

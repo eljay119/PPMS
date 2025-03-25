@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\DB;
 
 class PPMPController extends Controller
 {
+    public function index2() {
+        return view('head.ppmps.show');
+    }
     public function __construct()
     {
         $this->middleware('auth'); 
@@ -26,42 +29,29 @@ class PPMPController extends Controller
 
     public function index()
     {
-        $ppmps = PPMP::with(['sourceOfFund', 'ppmpStatus', 'office'])->get();
+        $ppmps = PPMP::with(['sourceOfFund', 'office'])->get();
         $fundSources = SourceOfFund::all();
 
         return view('head.ppmps.index', compact('ppmps', 'fundSources',));
     }
 
     public function store(Request $request)
-    {
-        try{
-            $request->validate([
-                'fiscal_year' => 'required|integer',
-                'source_of_fund_id' => 'required|exists:source_of_funds,id',
-                'office_id' => 'nullable|integer',
-            ]);
+{
+    $request->validate([
+        'fiscal_year' => 'required|integer',
+        'source_of_fund_id' => 'required|exists:source_of_funds,id',
+    ]);
 
-            
-            $user = Auth::user();
-            if (!$user) {
-                return redirect()->route('login')->withErrors('You must be logged in to perform this action.');
-            }
+    PPMP::create([
+        'fiscal_year' => $request->fiscal_year,
+        'source_of_fund_id' => $request->source_of_fund_id,
+        'ppmp_status_id' => 1, // or whatever default status you want
+    ]);
+    
 
-            $officeId = $request->office_id ?? $user->office->id;
+    return redirect()->route('head.ppmps.index')->with('success', 'PPMP added successfully!');
+}
 
-            PPMP::create([
-                'fiscal_year' => $request->fiscal_year,
-                'source_of_fund_id' => $request->source_of_fund_id,
-                'office_id' => $officeId,
-            ]);
-
-            return redirect()->route('head.ppmps.index')->with('success', 'PPMP created successfully!');
-        } catch(\Exception $e){
-            Log::error($e->getMessage());
-            return redirect()->route('head.ppmps.index');
-            
-        }
-    }
 
     public function update(Request $request, $id)
     {

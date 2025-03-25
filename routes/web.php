@@ -98,20 +98,26 @@ Route::prefix('admin')->middleware(['auth', CheckRole::class . ':admin'])->group
 });
 
 // Head Management Routes
-Route::prefix('head')->name('head.')->group(function () {
+Route::prefix('head')->name('head.')->middleware(['auth'])->group(function () {
+    // PPMP Routes
     Route::resource('ppmps', PPMPController::class);
+     // Handles index, show, store, update, destroy, etc.
     Route::put('/ppmps/{ppmp}/finalize', [PPMPController::class, 'finalize'])->name('ppmps.finalize');
-    Route::get('/ppmp_projects/{ppmp_id}', [PpmpProjectController::class, 'index'])->name('ppmp_projects.index');
-    Route::resource('ppmp_projects', PpmpProjectController::class)->except(['index']);
+
+    // Assigned APP Projects
     Route::get('/app-projects', [AppProjectController::class, 'index'])->name('app_projects.index');
 
-Route::prefix('head')->name('head.')->middleware(['auth'])->group(function () {
-    Route::resource('ppmp_projects', PpmpProjectController::class)->except(['create', 'show']);
+    // PPMP Projects Routes
+    // Show all projects under a specific PPMP
+    Route::get('/ppmps/{ppmp}/projects', [PpmpProjectController::class, 'index'])->name('ppmp_projects.index');
 
+    // Resource routes for storing/updating/deleting projects 
+    Route::post('/ppmp_projects', [PpmpProjectController::class, 'store'])->name('ppmp_projects.store');
+    Route::put('/ppmp_projects/{id}', [PpmpProjectController::class, 'update'])->name('ppmp_projects.update');
+    Route::delete('/ppmp_projects/{id}', [PpmpProjectController::class, 'destroy'])->name('ppmp_projects.destroy');
 });
-    
-});;
 
+    
 // Bac Sec Management Routes
 Route::prefix('bacsec')->name('bacsec.')->group(function () {
     Route::get('app', [AppController::class, 'index'])->name('app.index');

@@ -54,7 +54,8 @@ class PpmpProject extends Model
         return $this->belongsTo(AppProject::class, 'app_project_id');
     }
 
-    public function projectType()
+    // ✅ Renamed for consistency with Blade view
+    public function type()
     {
         return $this->belongsTo(ProjectType::class, 'type_id');
     }

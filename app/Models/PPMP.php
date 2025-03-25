@@ -8,9 +8,9 @@ class PPMP extends Model
 {
     protected $table = 'ppmps';
     
-    protected $fillable = ['fiscal_year', 'source_of_fund_id', 'office_id', 'type_id'];
+    protected $fillable = ['fiscal_year', 'source_of_fund_id', 'office_id', 'type_id','ppmp_status_id',];
 
-    public function sourceofFund()
+    public function sourceOfFund()
     {
         return $this->belongsTo(SourceOfFund::class, 'source_of_fund_id');
     }
