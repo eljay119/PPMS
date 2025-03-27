@@ -4,9 +4,9 @@ namespace App\Http\Controllers\BacSec;
 
 use App\Http\Controllers\Controller;
 use App\Models\App;
-use App\Models\User;
-use App\Models\AppProjectStatus;
+use App\Models\AppStatus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AppController extends Controller
 {
@@ -15,71 +15,79 @@ class AppController extends Controller
         $this->middleware('auth');
     }
 
-    // Display a listing of APP records
+    // Display all APPs
     public function index()
     {
-        $apps = App::with('appProjects')->get();
-        return view('bacsec.app.index', compact('apps'));
+        $apps = App::with('appStatus')->get();
+        $statuses = AppStatus::all();
+
+        return view('bacsec.app.index', compact('apps', 'statuses'));
     }
 
-    // Show the form for creating a new APP record
-    public function create()
-    {
-        $statuses = AppProjectStatus::all();
-        $users = User::all(); // Fetch users for 'prepared_by' field
-
-        return view('bacsec.app.create', compact('statuses', 'users'));
-    }
-
-    // Store a newly created APP record
+    // Store new APP
     public function store(Request $request)
     {
         $request->validate([
             'version_name' => 'required|string|max:255',
             'year' => 'required|integer|min:2000|max:' . (date('Y') + 1),
-            'status_id' => 'required|exists:app_project_statuses,id',
-            'prepared_id' => 'required|exists:users,id',
         ]);
 
-        App::create($request->all());
+        App::create([
+            'version_name' => $request->version_name,
+            'year' => $request->year,
+            'status_id' => 1, 
+            'prepared_id' => Auth::id(),
+        ]);
 
-        return redirect()->route('basec.app.index')->with('success', 'APP record created successfully!');
+        return redirect()->route('bacsec.app.index')->with('success', 'APP record created successfully!');
     }
 
-    // Show a specific APP record
-    public function show(App $app)
+    // Show individual APP
+    public function show($id)
     {
+        $app = App::with('appStatus')->findOrFail($id);
+
+       // $app = App::findOrFail($id);
+
         return view('bacsec.app.show', compact('app'));
     }
 
-    // Show the form for editing an APP record
-    public function edit(App $app)
-    {
-        $statuses = AppProjectStatus::all();
-        $users = User::all(); 
-
-        return view('bacsec.app.edit', compact('app', 'statuses', 'users'));
-    }
-
-    // Update an APP record
+    // Update existing APP
     public function update(Request $request, App $app)
     {
         $request->validate([
             'version_name' => 'required|string|max:255',
             'year' => 'required|integer|min:2000|max:' . (date('Y') + 1),
-            'status_id' => 'required|exists:app_project_statuses,id',
-            'prepared_id' => 'required|exists:users,id',
         ]);
 
-        $app->update($request->all());
+        $app->update([
+            'version_name' => $request->version_name,
+            'year' => $request->year,
+        ]);
 
         return redirect()->route('bacsec.app.index')->with('success', 'APP record updated successfully!');
     }
 
-    // Delete an APP record
+    // Delete APP
     public function destroy(App $app)
     {
         $app->delete();
+
         return redirect()->route('bacsec.app.index')->with('success', 'APP record deleted successfully!');
     }
+
+    public function consolidate($id)
+    {
+        $app = App::with(
+            'appProjects.category',
+            'appProjects.office',
+            'appProjects.sourceOfFund',
+            'appProjects.modeOfProcurement'
+        )->findOrFail($id);
+    
+        return view('bacsec.app.consolidate', compact('app'));
+    }
+    
+    
+
 }

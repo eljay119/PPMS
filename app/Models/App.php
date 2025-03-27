@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class App extends Model
 {
-    //
     use HasFactory;
 
     protected $table = 'apps';
@@ -22,5 +21,10 @@ class App extends Model
     public function appProjects()
     {
         return $this->hasMany(AppProject::class);
+    }
+
+    public function appStatus()
+    {
+        return $this->belongsTo(AppStatus::class, 'status_id');
     }
 }

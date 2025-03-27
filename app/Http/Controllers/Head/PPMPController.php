@@ -45,7 +45,7 @@ class PPMPController extends Controller
     PPMP::create([
         'fiscal_year' => $request->fiscal_year,
         'source_of_fund_id' => $request->source_of_fund_id,
-        'ppmp_status_id' => 1, // or whatever default status you want
+        'ppmp_status_id' => 1,
     ]);
     
 

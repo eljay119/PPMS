@@ -117,18 +117,15 @@ Route::prefix('head')->name('head.')->middleware(['auth'])->group(function () {
     Route::delete('/ppmp_projects/{id}', [PpmpProjectController::class, 'destroy'])->name('ppmp_projects.destroy');
 });
 
-    
 // Bac Sec Management Routes
 Route::prefix('bacsec')->name('bacsec.')->group(function () {
-    Route::get('app', [AppController::class, 'index'])->name('app.index');
+    Route::resource('app', AppController::class);
 
-    // App Projects
-    Route::get('app_projects', [AppProject2Controller::class, 'index'])->name('app_projects.index');
+    Route::get('app/{id}/consolidate', [AppController::class, 'consolidate'])->name('app.consolidate');
 
-    // App Project Statuses
-    Route::resource('app_project_statuses', AppProjectStatusController::class)->except(['show']);
-    Route::get('app_project_statuses/{id}', [AppProjectStatusController::class, 'show'])
-        ->name('app_project_statuses.show');
+    Route::resource('app_projects', AppProject2Controller::class)->only(['index']);
+
+    Route::resource('app_project_statuses', AppProjectStatusController::class);
 });
 
 

@@ -48,4 +48,19 @@ class AppProject extends Model
     {
         return $this->belongsTo(User::class, 'end_user_id');
     }
+
+    public function office()
+    {
+        return $this->belongsTo(Office::class, 'office_id');
+    }
+
+    public function sourceOfFund()
+    {
+        return $this->belongsTo(SourceOfFund::class);
+    }
+
+    public function modeOfProcurement()
+    {
+        return $this->belongsTo(ModeOfProcurement::class);
+    }
 }

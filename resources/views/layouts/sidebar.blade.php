@@ -3,7 +3,7 @@
         <div class="sb-sidenav-menu">
             <div class="nav">
                 <!-- DASHBOARDS -->
-                @if(Auth::user() && Auth::user()->role_id == 1) <!-- Admin -->
+                @if(Auth::user() && Auth::user()->role_id == 1) <!-- Administrator -->
                 <a class="nav-link text-white hover:bg-light" href="{{ route('admin.dashboard') }}">
                     <i class="fas fa-house me-2"></i> Dashboard
                 </a>
@@ -15,7 +15,7 @@
                 </a>
                 @endif
 
-                @if(Auth::user() && Auth::user()->role_id == 3) <!-- Bac Sec -->
+                @if(Auth::user() && Auth::user()->role_id == 3) <!-- BAC Secretary -->
                 <a class="nav-link text-white hover:bg-light" href="{{ route('bacsec.dashboard') }}">
                     <i class="fas fa-house me-2"></i> Dashboard
                 </a>
@@ -88,7 +88,7 @@
                     <!-- APP Management Dropdown -->
                     <a class="nav-link collapsed text-white" href="#" data-bs-toggle="collapse" 
                         data-bs-target="#collapseBacSec" aria-expanded="false" aria-controls="collapseBacSec">
-                        <i class="fas fa-users me-2"></i> APP 
+                        <i class="fas fa-folder me-2"></i> APP 
                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down text-white"></i></div>
                     </a>
                     <div class="collapse" id="collapseBacSec" data-bs-parent="#sidenavAccordion">
