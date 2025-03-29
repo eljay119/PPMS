@@ -28,24 +28,30 @@
                         <td>{{ $status->id }}</td>
                         <td>{{ $status->name }}</td>
                         <td class="d-flex gap-2">
-                            <!-- Edit Button -->
-                            <button type="button" class="btn btn-warning btn-sm edit-status" data-bs-toggle="modal" data-bs-target="#ppmpStatusModal"
-                                data-id="{{ $status->id }}" 
-                                data-name="{{ $status->name }}">
-                                <i class="bi bi-pencil-square"></i> 
-                            </button>
+                           <!-- Edit Button -->
+                        <buttona type="button" 
+                            class="text-warning me-2 edit-status" 
+                            title="Edit"
+                            data-bs-toggle="modal" 
+                            data-bs-target="#ppmpStatusModal"
+                            data-id="{{ $status->id }}" 
+                            data-name="{{ $status->name }}">
+                            <i class="fas fa-edit"></i>
+                        </button>
 
-                            <!-- Delete Form -->
-                            <form action="{{ route('admin.ppmp_status.destroy', $status->id) }}" method="POST" id="deleteForm-{{ $status->id }}">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" class="btn btn-danger btn-sm delete-btn"
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#deleteModal"
-                                    data-id="{{ $status->id }}">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </form>
+                        <!-- Delete Button -->
+                        <form action="{{ route('admin.ppmp_status.destroy', $status->id) }}" method="POST" id="deleteForm-{{ $status->id }}" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" 
+                                class="border-0 bg-transparent text-danger me-2 delete-btn" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#deleteModal" 
+                                data-id="{{ $status->id }}" 
+                                title="Delete">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
                         </td>
                     </tr>
                     @endforeach

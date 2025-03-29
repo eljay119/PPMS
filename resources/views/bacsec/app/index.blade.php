@@ -42,23 +42,28 @@
                                 </a>
 
                                 <!-- Edit -->
-                                <button type="button" class="btn btn-warning btn-sm edit-app"
+                                <buttona type="button" class="text-warning me-2" title="Edit"
                                     data-bs-toggle="modal"
                                     data-bs-target="#appModal"
                                     data-id="{{ $app->id }}"
                                     data-year="{{ $app->year }}"
                                     data-version_name="{{ $app->version_name }}">
-                                    <i class="bi bi-pencil-square"></i>
+                                    <i class="fas fa-edit"></i>
                                 </button>
 
                                 <!-- Delete -->
-                                <form action="{{ route('bacsec.app.destroy', $app->id) }}" method="POST" id="deleteForm-{{ $app->id }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button" class="btn btn-danger btn-sm delete-btn" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="{{ $app->id }}">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
+                                <form action="{{ route('bacsec.app.destroy', $app->id) }}" method="POST" id="deleteForm-{{ $app->id }}" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" 
+                                        class="border-0 bg-transparent text-danger me-2 delete-btn" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#deleteModal" 
+                                        data-id="{{ $app->id }}" 
+                                        title="Delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
                             </div>
                         </td>
                     </tr>

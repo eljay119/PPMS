@@ -30,22 +30,32 @@
             <td>{{ $status->status }}</td>
             <td>{{ $status->description }}</td>
             <td>
-                <button type="button" class="btn btn-warning btn-sm editStatusBtn"
-                    data-id="{{ $status->id }}" 
-                    data-status="{{ $status->status }}"
-                    data-description="{{ $status->description }}"
-                    data-bs-toggle="modal" 
-                    data-bs-target="#ppmpProjectStatusModal">
-                    <i class="bi bi-pencil-square"></i>
-                </button>
+               <!-- Edit -->
+            <buttona type="button" 
+                class="text-warning me-2 editStatusBtn" 
+                title="Edit"
+                data-bs-toggle="modal" 
+                data-bs-target="#ppmpProjectStatusModal"
+                data-id="{{ $status->id }}" 
+                data-status="{{ $status->status }}"
+                data-description="{{ $status->description }}">
+                <i class="fas fa-edit"></i>
+            </button>
 
-                <form action="{{ route('admin.ppmp_project_statuses.destroy', $status->id) }}" method="POST" class="d-inline">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-sm">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </form>
+            <!-- Delete -->
+            <form action="{{ route('admin.ppmp_project_statuses.destroy', $status->id) }}" method="POST" id="deleteForm-{{ $status->id }}" style="display: inline;">
+                @csrf
+                @method('DELETE')
+                <button type="button" 
+                    class="border-0 bg-transparent text-danger me-2 delete-btn" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#deleteModal" 
+                    data-id="{{ $status->id }}" 
+                    title="Delete">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </form>
+
             </td>
         </tr>
         @endforeach

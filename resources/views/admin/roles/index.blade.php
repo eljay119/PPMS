@@ -30,23 +30,27 @@
                         <td>{{ $role->name }}</td>
                         <td>{{ $role->description }}</td>
                         <td class="d-flex gap-2">
-                        <button type="button" class="btn btn-warning btn-sm edit-role" data-bs-toggle="modal" data-bs-target="#roleModal" 
-                            data-id="{{ $role->id }}" 
-                            data-name="{{ $role->name }}" 
-                            data-description="{{ $role->description }}">
-                            <i class="bi bi-pencil-square"></i> 
+                        <buttona type="button" class="text-warning me-2" title="Edit"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#roleModal"
+                                    data-id="{{ $role->id }}"
+                                    data-name="{{ $role->name }}"
+                                    data-description="{{ $role->description }}">
+                                    <i class="fas fa-edit"></i>
                         </button>
 
-                            <form action="{{ route('admin.roles.destroy', $role) }}" method="POST" id="deleteForm-{{ $role->id }}" action="{{ route('admin.roles.destroy', $role->id) }}">
+                        <form action="{{ route('admin.roles.destroy', $role) }}" method="POST" id="deleteForm-{{ $role->id }}" action="{{ route('admin.roles.destroy', $role->id) }}" style="display: inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="button" class="btn btn-danger btn-sm"
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#deleteModal"
-                                    data-id="{{ $role->id }}">
-                                    <i class="bi bi-trash"></i>
+                                <button type="button" 
+                                        class="border-0 bg-transparent text-danger me-2 delete-btn" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#deleteModal" 
+                                        data-id="{{ $role->id }}" 
+                                        title="Delete">
+                                    <i class="fas fa-trash-alt"></i>
                                 </button>
-                            </form>
+                        </form>
                         </td>
                     </tr>
                     @endforeach

@@ -34,21 +34,29 @@
                         <td>{{ $user->username }}</td>
                         <td>{{ optional($user->role)->name ?? 'No Role' }}</td>
                         <td class="d-flex gap-2">
-                        <button type="button" class="btn btn-warning btn-sm edit-user" 
-                            data-bs-toggle="modal" data-bs-target="#userModal" 
+                        <!-- Edit Button -->
+                        <buttona type="button" class="text-warning me-2 edit-user" 
+                            title="Edit"
+                            data-bs-toggle="modal" 
+                            data-bs-target="#userModal" 
                             data-user='@json($user)'>
-                            <i class="bi bi-pencil-square"></i> 
+                            <i class="fas fa-edit"></i>
                         </button>
-                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" id="deleteForm-{{ $user->id }}" action="{{ route('admin.users.destroy', $user->id) }}">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" class="btn btn-danger btn-sm"
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#deleteModal"
-                                    data-id="{{ $user->id }}">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </form>
+
+                        <!-- Delete Button -->
+                        <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" id="deleteForm-{{ $user->id }}" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" 
+                                class="border-0 bg-transparent text-danger me-2 delete-btn" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#deleteModal" 
+                                data-id="{{ $user->id }}" 
+                                title="Delete">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+
                         </td>
                     </tr>
                     @endforeach

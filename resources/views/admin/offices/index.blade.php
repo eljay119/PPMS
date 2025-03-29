@@ -33,21 +33,34 @@
                         <td>{{ $office->alternate_name ?? 'N/A' }}</td>
                         <td>{{ $office->type->type ?? 'No Type' }}</td>
                         <td class="d-flex gap-2">
-                            <button type="button" class="btn btn-warning btn-sm edit-office" 
-                                data-bs-toggle="modal" data-bs-target="#editOfficeModal"
-                                data-id="{{ $office->id }}"
-                                data-name="{{ $office->name }}"
-                                data-user_id="{{ $office->user_id }}"
-                                data-alternate_name="{{ $office->alternate_name }}"
-                                data-office_type_id="{{ $office->type->id ?? '' }}">
-                                <i class="bi bi-pencil-square"></i>
-                            </button>
+                            <!-- Edit Button -->
+                        <buttona type="button" 
+                            class="text-warning me-2 edit-office" 
+                            title="Edit"
+                            data-bs-toggle="modal" 
+                            data-bs-target="#editOfficeModal"
+                            data-id="{{ $office->id }}"
+                            data-name="{{ $office->name }}"
+                            data-user_id="{{ $office->user_id }}"
+                            data-alternate_name="{{ $office->alternate_name }}"
+                            data-office_type_id="{{ $office->type->id ?? '' }}">
+                            <i class="fas fa-edit"></i>
+                        </button>
 
-                            <button type="button" class="btn btn-danger btn-sm delete-btn" 
-                                data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                data-id="{{ $office->id }}">
-                                <i class="bi bi-trash"></i>
+                        <!-- Delete Button -->
+                        <form action="{{ route('admin.offices.destroy', $office->id) }}" method="POST" id="deleteForm-{{ $office->id }}" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" 
+                                class="border-0 bg-transparent text-danger me-2 delete-btn" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#deleteModal" 
+                                data-id="{{ $office->id }}" 
+                                title="Delete">
+                                <i class="fas fa-trash-alt"></i>
                             </button>
+                        </form>
+
                         </td>
                     </tr>
                     @endforeach
