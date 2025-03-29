@@ -7,6 +7,9 @@
     <div class="card-body">
         <div class="d-flex justify-content-between mb-3">
             <h5>Annual Procurement Plan</h5>
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="titleSearch" placeholder="Search APP">
+            </div>
             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#appModal" id="addAppBtn">
                 <i class="bi bi-plus-lg"></i> Add APP
             </button>
@@ -15,7 +18,7 @@
         <!-- Table Section -->
         <div class="table-responsive">
             <table class="table table-striped table-bordered text-center align-middle">
-                <thead class="table-dark">
+                <thead class="table-primary">
                     <tr>
                         <th>#</th>
                         <th>Fiscal Year</th>
@@ -34,8 +37,8 @@
                         <td class="text-center">
                             <div class="btn-group">
                                 <!-- View -->
-                                <a href="{{ route('bacsec.app.show', $app->id) }}" class="btn btn-info btn-sm">
-                                    <i class="bi bi-eye"></i>
+                                <a href="{{ route('bacsec.app.show', $app->id) }}" class="text-primary me-2" title="View">
+                                    <i class="fas fa-eye"></i>
                                 </a>
 
                                 <!-- Edit -->

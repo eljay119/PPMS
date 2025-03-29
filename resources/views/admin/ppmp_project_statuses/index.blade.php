@@ -14,14 +14,14 @@
 
         <div class="table-responsive">
         <table class="table table-striped table-bordered">
-    <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Status</th>
-            <th>Description</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
+        <thead class="table-primary">
+            <tr>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
     <tbody>
     @foreach($statuses->sortBy('id') as $status)
 

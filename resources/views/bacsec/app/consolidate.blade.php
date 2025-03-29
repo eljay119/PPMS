@@ -17,20 +17,19 @@
     <!-- Filters -->
     <div class="row mb-3">
         <div class="col-md-3">
-            <select class="form-select" name="category_filter">
-                <option selected>All Categories</option>
-                {{-- Example static options --}}
-                {{-- @foreach ($categories as $category) --}}
-                {{-- <option value="{{ $category->id }}">{{ $category->name }}</option> --}}
-                {{-- @endforeach --}}
-            </select>
+        <select class="form-select" name="category_filter">
+            <option value="" selected>All Categories</option>
+            @foreach ($categories as $category)
+                <option value="{{ $category->id }}">{{ $category->name }}</option>
+            @endforeach
+        </select>
         </div>
         <div class="col-md-3">
-            <select class="form-select" name="source_filter">
-                <option selected>All Sources</option>
-                {{-- @foreach ($sources as $source) --}}
-                {{-- <option value="{{ $source->id }}">{{ $source->name }}</option> --}}
-                {{-- @endforeach --}}
+        <select class="form-select" name="source_filter">
+            <option selected>All Sources</option>
+            @foreach ($sources as $source)
+                <option value="{{ $source->id }}">{{ $source->name }}</option>
+            @endforeach
             </select>
         </div>
     </div>

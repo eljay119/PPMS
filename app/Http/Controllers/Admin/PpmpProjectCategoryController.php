@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PpmpProject;
 use App\Models\PpmpProjectCategory;
+use App\Models\SourceOfFund;
 use App\Models\ModeOfProcurement;
 use App\Models\ProjectType;
 use Illuminate\Http\Request;
@@ -84,5 +85,14 @@ class PpmpProjectController extends Controller
         $ppmp->delete();
 
         return redirect()->route('ppmp_projects.index')->with('success', 'PPMP Project deleted successfully.');
+    }
+
+    public function consolidate($id)
+    {
+        $categories = PpmpProjectCategory::all();
+
+        $sources = SourceOfFund::all();
+
+        return view('bacsec.app.consolidate', compact('categories', 'sources'));
     }
 }

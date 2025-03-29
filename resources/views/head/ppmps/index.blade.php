@@ -15,7 +15,7 @@
         <!-- Table Section -->
         <div class="table-responsive">
             <table class="table table-striped table-bordered text-center align-middle">
-                <thead class="table-dark">
+                <thead class="table-primary">
                     <tr>
                         <th>Fiscal Year</th>
                         <th>Fund Source</th>

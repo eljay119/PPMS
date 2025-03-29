@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\BacSec;
 
 use App\Http\Controllers\Controller;
+use App\Models\PpmpProjectCategory;
+use App\Models\SourceOfFund;
 use App\Models\App;
 use App\Models\AppStatus;
 use Illuminate\Http\Request;
@@ -21,7 +23,9 @@ class AppController extends Controller
         $apps = App::with('appStatus')->get();
         $statuses = AppStatus::all();
 
-        return view('bacsec.app.index', compact('apps', 'statuses'));
+        $sources = SourceOfFund::all();
+
+        return view('bacsec.app.index', compact('apps', 'statuses', 'sources'));
     }
 
     // Store new APP
@@ -85,7 +89,10 @@ class AppController extends Controller
             'appProjects.modeOfProcurement'
         )->findOrFail($id);
     
-        return view('bacsec.app.consolidate', compact('app'));
+        $categories = PpmpProjectCategory::all();
+        $sources = SourceOfFund::all();
+    
+        return view('bacsec.app.consolidate', compact('app', 'categories', 'sources'));
     }
     
     

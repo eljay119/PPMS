@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\SourceOfFund;
+use App\Models\PpmpProjectCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -73,14 +74,21 @@ class SourceOfFundController extends Controller
             ->with('success', 'Source of Fund updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    
     public function destroy(SourceOfFund $sourceOfFund)
     {
         $sourceOfFund->delete();
 
         return redirect()->route('admin.source_of_funds.index')
             ->with('success', 'Source of Fund deleted successfully.');
+    }
+
+    public function consolidate($id)
+    {
+        $categories = PpmpProjectCategory::all();
+
+        $sources = SourceOfFund::all();
+
+        return view('bacsec.app.consolidate', compact('categories', 'sources'));
     }
 }

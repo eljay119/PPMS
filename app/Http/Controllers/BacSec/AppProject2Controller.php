@@ -18,15 +18,23 @@ class AppProject2Controller extends Controller
         $this->middleware('auth');
     }
 
-    // Display a listing of APP Projects
-    public function index()
+    
+    public function index(Request $request)
     {
-        $projects = AppProject::with(['app', 'category', 'status', 'fund', 'endUser'])->get();
-
-        return view('bacsec.app_projects.index', compact('projects'));
+        $query = AppProject::query();
+    
+        if ($request->filled('quarterFilter')) {
+            $query->where('quarter', $request->quarterFilter);
+        }
+        
+        $sources = SourceOfFund::all();
+        $statuses = AppProjectStatus::all();
+        $projects = $query->with(['app', 'category', 'status', 'fund', 'endUser'])->get();
+    
+        return view('bacsec.app_projects.index', compact('projects', 'sources', 'statuses'));
     }
 
-    // Show the form for creating a new APP Project
+    
     public function create()
     {
         $apps = App::all();
@@ -38,7 +46,7 @@ class AppProject2Controller extends Controller
         return view('bacsec.app_projects.create', compact('apps', 'categories', 'statuses', 'funds', 'users'));
     }
 
-    // Store a newly created APP Project
+   
     public function store(Request $request)
     {
         $request->validate([
@@ -59,13 +67,13 @@ class AppProject2Controller extends Controller
         return redirect()->route('bacsec.app_projects.index')->with('success', 'APP Project created successfully!');
     }
 
-    // Show a specific APP Project
+    
     public function show(AppProject $appProject)
     {
         return view('bacsec.app_projects.show', compact('appProject'));
     }
 
-    // Show the form for editing an APP Project
+    
     public function edit(AppProject $appProject)
     {
         $apps = App::all();
@@ -77,7 +85,7 @@ class AppProject2Controller extends Controller
         return view('bacsec.app_projects.edit', compact('appProject', 'apps', 'categories', 'statuses', 'funds', 'users'));
     }
 
-    // Update an APP Project
+  
     public function update(Request $request, AppProject $appProject)
     {
         $request->validate([
@@ -98,7 +106,7 @@ class AppProject2Controller extends Controller
         return redirect()->route('bacsec.app_projects.index')->with('success', 'APP Project updated successfully!');
     }
 
-    // Delete an APP Project
+   
     public function destroy(AppProject $appProject)
     {
         $appProject->delete();
