@@ -50,18 +50,32 @@ class PpmpProjectController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'amount' => 'required|numeric|min:0',
-            'remarks' => 'nullable|string',
             'category_id' => 'required|exists:ppmp_project_categories,id',
             'mode_of_procurement_id' => 'required|exists:mode_of_procurements,id',
-            'status_id' => 'required|exists:ppmp_project_statuses,id',
             'type_id' => 'required|exists:project_types,id',
             'ppmp_id' => 'required|exists:ppmps,id',
         ]);
        
         Log::info('Validated Data:', $validated);
-
+    
         try {
-            $project = PpmpProject::create($validated);
+            // Retrieve PPMP record to get office_id and source_of_fund_id
+            $ppmp = PPMP::findOrFail($request->ppmp_id);
+    
+            $project = PpmpProject::create([
+                'title' => $validated['title'],
+                'description' => $validated['description'],
+                'amount' => $validated['amount'],
+                'category_id' => $validated['category_id'],
+                'mode_of_procurement_id' => $validated['mode_of_procurement_id'],
+                'type_id' => $validated['type_id'],
+                'ppmp_id' => $validated['ppmp_id'],
+                'office_id' => $ppmp->office_id,  
+                'source_of_fund_id' => $ppmp->source_of_fund_id, 
+                'status_id' => 9, 
+                'end_user' => $ppmp->office->user->id,
+            ]);
+    
             Log::info('PPMP Project Created:', ['id' => $project->id]);
             return redirect()->route('head.ppmps.show', ['ppmp_id' => $request->ppmp_id])
                 ->with('success', 'PPMP Project created successfully!');
@@ -70,13 +84,14 @@ class PpmpProjectController extends Controller
             return back()->with('error', 'Failed to save project.');
         }
     }
+    
 
     public function show($id)
     {
         $project = PpmpProject::with(['ppmp', 'category', 'modeOfProcurement', 'status', 'type', 'appProject'])
                             ->findOrFail($id);
-        $projects = AppProject::all(); // Fetch all APP projects
-        $statuses = PpmpProjectStatus::all(); // Fetch statuses
+        $projects = AppProject::all(); 
+        $statuses = PpmpProjectStatus::all();
 
         return view('head.ppmp_projects.show', compact('project', 'projects', 'statuses'));
     }
@@ -96,8 +111,6 @@ class PpmpProjectController extends Controller
         ]);
     }
     
-    
-
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
@@ -107,7 +120,6 @@ class PpmpProjectController extends Controller
             'remarks' => 'nullable|string',
             'category_id' => 'required|exists:ppmp_project_categories,id',
             'mode_of_procurement_id' => 'required|exists:mode_of_procurements,id',
-            'status_id' => 'required|exists:ppmp_project_statuses,id',
             'type_id' => 'required|exists:project_types,id',
             'app_project_id' => 'required|exists:app_projects,id',
         ]);

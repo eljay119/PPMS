@@ -47,8 +47,9 @@ class User extends Authenticatable
     }
 
     public function office() {
-        return $this->hasOne(Office::class, 'user_id');
+        return $this->belongsTo(Office::class, 'office_id');
     }
+
     
     protected function casts(): array
     {

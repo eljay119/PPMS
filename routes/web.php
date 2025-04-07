@@ -11,6 +11,7 @@ use App\Http\Controllers\BudgetOfficerController;
 use App\Http\Controllers\CampusDirectorController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\Admin\OfficeController;
 use App\Http\Controllers\Admin\OfficeTypeController;
 use App\Http\Controllers\Admin\SourceOfFundController;
@@ -20,7 +21,6 @@ use App\Http\Controllers\Admin\ProjectTypeController;
 use App\Http\Controllers\Admin\PpmpProjectCategoryController;
 use App\Http\Controllers\Admin\AppStatusController;
 use App\Http\Controllers\Admin\ModeOfProcurementController;
-
 use App\Http\Controllers\Head\PPMPController;
 use App\Http\Controllers\Head\PpmpProjectController;
 use App\Http\Controllers\Head\AppProjectController;
@@ -126,6 +126,10 @@ Route::prefix('bacsec')->name('bacsec.')->group(function () {
     Route::resource('app_projects', AppProject2Controller::class)->only(['index']);
 
     Route::resource('app_project_statuses', AppProjectStatusController::class);
+
+    Route::post('app/{app}/merge', [AppController::class, 'mergeProjects'])->name('merge.projects');
+    // Route::post('/projects/merge', [ProjectController::class, 'merge'])->name('projects.merge');
+
 });
 
 

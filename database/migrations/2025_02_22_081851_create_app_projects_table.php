@@ -6,14 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+   
     public function up(): void
     {
         Schema::create('app_projects', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title')->nullable();
             $table->string('description');
             $table->decimal('abc',15,2);
             $table->integer('quarter');
@@ -37,20 +35,18 @@ return new class extends Migration
         });
     }
 
-    /**
- * Reverse the migrations.
- */
-public function down(): void
-{
-    Schema::table('app_projects', function (Blueprint $table) {
-        $table->dropForeign(['status_id']);
-        $table->dropForeign(['app_id']);
-        $table->dropForeign(['category_id']);
-        $table->dropForeign(['fund_id']);
-        $table->dropForeign(['end_user_id']);
-    });
+   
+    public function down(): void
+    {
+        Schema::table('app_projects', function (Blueprint $table) {
+            $table->dropForeign(['status_id']);
+            $table->dropForeign(['app_id']);
+            $table->dropForeign(['category_id']);
+            $table->dropForeign(['fund_id']);
+            $table->dropForeign(['end_user_id']);
+        });
 
-    Schema::dropIfExists('app_projects');
-}
+        Schema::dropIfExists('app_projects');
+    }
 
 };

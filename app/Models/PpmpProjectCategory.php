@@ -9,5 +9,7 @@ class PpmpProjectCategory extends Model
 {
     use HasFactory;
 
+    protected $table = 'ppmp_project_categories'; 
+
     protected $fillable = ['name', 'description'];
 }

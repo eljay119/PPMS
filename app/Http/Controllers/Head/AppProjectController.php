@@ -21,8 +21,9 @@ class AppProjectController extends Controller
     // Display a listing of APP Projects
     public function index()
     {
+        $funds = SourceOfFund::all();
         $projects = AppProject::with(['app', 'category', 'status', 'fund', 'endUser'])->get();
-        return view('head.app_projects.index', compact('projects'));
+        return view('head.app_projects.index', compact('projects', 'funds'));
     }
 
     // Show the form for creating a new APP Project

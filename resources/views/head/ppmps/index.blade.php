@@ -5,11 +5,27 @@
 @section('content')
 <div class="card shadow-sm">
     <div class="card-body">
-        <div class="d-flex justify-content-between mb-3">
-            <h5>PPMP</h5>
-            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#ppmpModal" id="addppmpBtn">
-                <i class="bi bi-plus-lg"></i> Add PPMP
-            </button>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Procurement Project Management Plan</h5>
+            <div class="d-flex align-items-center gap-2">
+                <!-- Search Input -->
+                <input type="text" id="searchPPMP" class="form-control form-control-sm" 
+                    placeholder="Search by Year or Fund Source" style="width: 200px;">
+                
+                <!-- Fund Source Filter -->
+                <select id="source_filter" class="form-select form-select-sm" style="width: 180px;">
+                    <option selected>All Fund Sources</option>
+                    @foreach ($fundSources as $fundSource)
+                        <option value="{{ $fundSource->id }}">{{ $fundSource->name }}</option>
+                    @endforeach
+                </select>
+
+                <!-- Add PPMP Button -->
+                <button type="button" class="btn btn-primary btn-sm d-flex align-items-center" 
+                        data-bs-toggle="modal" data-bs-target="#ppmpModal" id="addppmpBtn">
+                    <i class="bi bi-plus-lg me-1"></i> Add PPMP
+                </button>
+            </div>
         </div>
 
         <!-- Table Section -->
@@ -30,32 +46,35 @@
                         <td class="text-center">
                             <div class="btn-group">
                                 <!-- View Icon -->
-                                <a href="{{ route('head.ppmps.show', $ppmp->id) }}" class="btn btn-info btn-sm mx-1">
-                                    <i class="bi bi-eye"></i>
+                                <a href="{{ route('head.ppmps.show', $ppmp->id) }}" class="text-primary me-2" title="View">
+                                    <i class="fas fa-eye"></i>
                                 </a>
 
-
                                 <!-- Edit Icon -->
-                                <button type="button" class="btn btn-warning btn-sm edit-ppmp mx-1" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#ppmpModal"
-                                    data-id="{{ $ppmp->id }}"
-                                    data-fiscal_year="{{ $ppmp->fiscal_year }}"
-                                    data-fund_source="{{ $ppmp->source_of_fund_id }}">
-                                    <i class="bi bi-pencil-square"></i> 
-                                </button>
+                            <buttona type="button" 
+                                class="text-warning me-2 edit-ppmp" title="Edit"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#ppmpModal"
+                                data-id="{{ $ppmp->id }}"
+                                data-fiscal_year="{{ $ppmp->fiscal_year }}"
+                                data-fund_source="{{ $ppmp->source_of_fund_id }}">
+                                <i class="fas fa-edit"></i>
+                            </button>
 
-                                <!-- Delete Icon -->
-                                <form action="{{ route('head.ppmps.destroy', $ppmp->id) }}" method="POST" id="deleteForm-{{ $ppmp->id }}" action="{{ route('head.ppmps.destroy', $ppmp->id) }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button" class="btn btn-danger btn-sm delete-btn mx-1" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#deleteModal"
-                                        data-id="{{ $ppmp->id }}">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
+                            <!-- Delete -->
+                            <form action="{{ route('head.ppmps.destroy', $ppmp->id) }}" method="POST" id="deleteForm-{{ $ppmp->id }}" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" 
+                                    class="border-0 bg-transparent text-danger me-2 delete-btn" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#deleteModal" 
+                                    data-id="{{ $ppmp->id }}" 
+                                    title="Delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+
                             </div>
                         </td>
                     </tr>
@@ -146,6 +165,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 <!-- JavaScript for Edit & View Modals -->

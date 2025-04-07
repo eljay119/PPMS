@@ -22,6 +22,7 @@ class PPMPController extends Controller
     public function index2() {
         return view('head.ppmps.show');
     }
+
     public function __construct()
     {
         $this->middleware('auth'); 
@@ -29,29 +30,60 @@ class PPMPController extends Controller
 
     public function index()
     {
-        $ppmps = PPMP::with(['sourceOfFund', 'office'])->get();
+        $user = Auth::user();
+
+        // Get the office assigned to the current Head user
+        $office = \App\Models\Office::where('user_id', $user->id)->first();
+
+        if (!$office) {
+            return back()->with('error', 'No office assigned to this user.');
+        }
+
+        // Filter PPMP records based on the user's office_id
+        $ppmps = PPMP::with(['sourceOfFund', 'office'])
+                    ->where('office_id', $office->id)
+                    ->get();
+ 
         $fundSources = SourceOfFund::all();
 
-        return view('head.ppmps.index', compact('ppmps', 'fundSources',));
+        return view('head.ppmps.index', compact('ppmps', 'fundSources'));
     }
 
+
     public function store(Request $request)
-{
-    $request->validate([
-        'fiscal_year' => 'required|integer',
-        'source_of_fund_id' => 'required|exists:source_of_funds,id',
-    ]);
+    {
+        $request->validate([
+            'fiscal_year' => 'required|integer',
+            'source_of_fund_id' => 'required|exists:source_of_funds,id',
+        ]);
 
-    PPMP::create([
-        'fiscal_year' => $request->fiscal_year,
-        'source_of_fund_id' => $request->source_of_fund_id,
-        'ppmp_status_id' => 1,
-    ]);
-    
+        $user = Auth::user();
 
-    return redirect()->route('head.ppmps.index')->with('success', 'PPMP added successfully!');
-}
+        $office = \App\Models\Office::where('user_id', $user->id)->first();
 
+        if (!$office) {
+            return back()->with('error', 'No office assigned to this user.');
+        }
+
+        // Find an existing APP for the same fiscal year, or create a new one
+        $app = \App\Models\App::firstOrCreate([
+            'year' => $request->fiscal_year
+        ], [
+            'version_name' => 'Default Version', // You can modify this
+            'status_id' => 1,
+            'prepared_id' => $user->id,
+        ]);
+
+        PPMP::create([
+            'fiscal_year' => $request->fiscal_year,
+            'source_of_fund_id' => $request->source_of_fund_id,
+            'ppmp_status_id' => 1,
+            'office_id' => $office->id,
+            'user_id' => $user->id,
+        ]);
+
+        return redirect()->route('head.ppmps.index')->with('success', 'PPMP added successfully!');
+    }
 
     public function update(Request $request, $id)
     {
@@ -84,6 +116,7 @@ class PPMPController extends Controller
         $modes = ModeOfProcurement::all();
         $statuses = PpmpProjectStatus::all();
         $projectTypes = ProjectType::all();
+        
         return view('head.ppmps.show', compact('ppmp', 'categories', 'modes', 'statuses', 'projectTypes'));
     }
 

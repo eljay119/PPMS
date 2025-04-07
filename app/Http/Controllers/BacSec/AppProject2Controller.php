@@ -29,7 +29,7 @@ class AppProject2Controller extends Controller
         
         $sources = SourceOfFund::all();
         $statuses = AppProjectStatus::all();
-        $projects = $query->with(['app', 'category', 'status', 'fund', 'endUser'])->get();
+        $projects = $query->with(['app', 'category', 'status', 'fund', 'endUser', 'office'])->get();
     
         return view('bacsec.app_projects.index', compact('projects', 'sources', 'statuses'));
     }
@@ -50,6 +50,7 @@ class AppProject2Controller extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'ppmp_id' => 'required|exists:ppmps,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'abc' => 'required|numeric|min:0',

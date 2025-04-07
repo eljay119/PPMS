@@ -42,7 +42,7 @@
                                 </a>
 
                                 <!-- Edit -->
-                                <buttona type="button" class="text-warning me-2" title="Edit"
+                                <buttona type="button" class="text-warning me-2 edit-app" title="Edit"
                                     data-bs-toggle="modal"
                                     data-bs-target="#appModal"
                                     data-id="{{ $app->id }}"
@@ -136,26 +136,38 @@
 <!-- JS for Modal Logic -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Add APP
-        document.getElementById("addAppBtn").addEventListener("click", function () {
-            document.getElementById("appForm").reset();
-            document.getElementById("formMethod").value = "POST";
-            document.getElementById("appForm").setAttribute("action", "{{ route('bacsec.app.store') }}");
-            document.querySelector("#appModal .modal-title").textContent = "Add APP";
-        });
+    // Add APP (when clicking "Add APP" button)
+    document.getElementById("addAppBtn").addEventListener("click", function () {
+        document.getElementById("appForm").reset(); 
+        document.getElementById("formMethod").value = "POST";
+        document.getElementById("appId").value = ""; 
+        document.getElementById("appForm").setAttribute("action", "{{ route('bacsec.app.store') }}");
 
-        // Edit APP
-        document.querySelectorAll(".edit-app").forEach(button => {
-            button.addEventListener("click", function () {
-                const id = this.getAttribute("data-id");
-                document.getElementById("appId").value = id;
-                document.getElementById("year").value = this.getAttribute("data-year");
-                document.getElementById("version_name").value = this.getAttribute("data-version_name");
-                document.getElementById("formMethod").value = "PUT";
-                document.getElementById("appForm").setAttribute("action", "/bacsec/app/" + id);
-                document.querySelector("#appModal .modal-title").textContent = "Edit APP";
-            });
+        
+        document.querySelector("#appModal .modal-title").textContent = "Add APP";
+    });
+
+    // Edit APP (when clicking "Edit" button)
+    document.querySelectorAll(".edit-app").forEach(button => {
+        button.addEventListener("click", function () {
+            const id = this.getAttribute("data-id");
+            const year = this.getAttribute("data-year");
+            const versionName = this.getAttribute("data-version_name");
+
+            
+            document.getElementById("appId").value = id;
+            document.getElementById("year").value = year;
+            document.getElementById("version_name").value = versionName;
+
+            
+            document.getElementById("formMethod").value = "PUT";
+            document.getElementById("appForm").setAttribute("action", "/bacsec/app/" + id);
+
+            
+            document.querySelector("#appModal .modal-title").textContent = "Edit APP";
         });
+    });
+});
 
         // Delete Logic
         let deleteId = null;
@@ -170,6 +182,6 @@
                 document.getElementById("deleteForm-" + deleteId).submit();
             }
         });
-    });
+
 </script>
 @endsection

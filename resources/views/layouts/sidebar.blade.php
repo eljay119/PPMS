@@ -61,8 +61,8 @@
                         <nav class="sb-sidenav-menu-nested nav">
                             <a class="nav-link text-white" href="{{ route('admin.ppmp_status.index') }}">PPMP Status</a>
                             <a class="nav-link text-white" href="{{ route('admin.ppmp_project_statuses.index') }}">PPMP Project Statuses</a>
-                            <a class="nav-link text-white" href="#">Source of Fund</a>
-                            <a class="nav-link text-white" href="#">APP Status</a>
+                            <!-- <a class="nav-link text-white" href="#">Source of Fund</a>
+                            <a class="nav-link text-white" href="#">APP Status</a> -->
                         </nav>
                     </div>
                 @endif

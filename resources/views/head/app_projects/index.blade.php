@@ -9,7 +9,10 @@
             <option>2025</option>
         </select>
         <select class="form-select" id="fundFilter">
-            <option>Select Fund</option>
+            <option selected>Select Fund</option>
+            @foreach ($funds as $fund)
+                <option value="{{ $fund->id }}">{{ $fund->name }}</option>
+            @endforeach
         </select>
     </div>
     <table class="table table-bordered table-striped">

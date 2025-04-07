@@ -18,10 +18,13 @@ class AppProject extends Model
         'quarter',
         'mode_id',
         'app_id',
+        'ppmp_project_id',
         'category_id',
         'status_id',
+        'remarks',        
         'fund_id',
         'end_user_id',
+        'office_id',
     ];
 
     public function app()
@@ -39,11 +42,11 @@ class AppProject extends Model
         return $this->belongsTo(AppProjectStatus::class, 'status_id');
     }
 
-    public function fund()
+    public function sourceOfFund()
     {
         return $this->belongsTo(SourceOfFund::class, 'fund_id');
     }
-
+    
     public function endUser()
     {
         return $this->belongsTo(User::class, 'end_user_id');
@@ -53,14 +56,18 @@ class AppProject extends Model
     {
         return $this->belongsTo(Office::class, 'office_id');
     }
-
-    public function sourceOfFund()
-    {
-        return $this->belongsTo(SourceOfFund::class);
-    }
-
+    
     public function modeOfProcurement()
     {
-        return $this->belongsTo(ModeOfProcurement::class);
+        return $this->belongsTo(ModeOfProcurement::class, 'mode_id');
     }
+    public function ppmp()
+    {
+        return $this->belongsTo(PPMP::class, 'ppmp_id');
+    }
+    public function ppmpProject()
+    {
+        return $this->belongsTo(PpmpProject::class, 'ppmp_project_id');
+    }
+
 }

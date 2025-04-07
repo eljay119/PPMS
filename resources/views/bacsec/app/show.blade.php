@@ -38,32 +38,34 @@
                     <a href="{{ route('bacsec.app.consolidate', $app->id) }}" class="btn btn-primary float-end">Consolidate Project</a>
                 </div>
                 <div class="card-body">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Project Title</th>
-                                <th>ABC</th>
-                                <th>Category</th>
-                                <th>Mode of Procurement</th>
-                                <th>Source of Fund</th>
-                                <th>PMO/End User</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @forelse($app->appProjects as $project)
-                            <tr>
-                                <td>{{ $project->title }}</td>
-                                <td>{{ number_format($project->amount, 2) }}</td>
-                                <td>{{ $project->category->name ?? 'N/A' }}</td>
-                                <td>{{ $project->modeOfProcurement->name ?? 'N/A' }}</td>
-                                <td>{{ $project->sourceOfFund->name ?? 'N/A' }}</td>
-                                <td>{{ $project->pmo_end_user ?? 'N/A' }}</td>
-                            </tr>
-                        @empty
-                            <tr><td colspan="8" class="text-center">No projects found.</td></tr>
-                        @endforelse
-                        </tbody>
-                    </table>
+                <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Project Title</th>
+                <th>ABC</th>
+                <th>Category</th>
+                <th>Mode of Procurement</th>
+                <th>Source of Fund</th>
+                <th>PMO/End User</th>
+            </tr>
+        </thead>
+            <tbody>
+                {{-- App Projects --}}
+                @forelse($app->appProjects as $project)
+                    <tr>
+                        <td>{{ $project->title }}</td>
+                        <td>{{ number_format($project->abc, 2) }}</td>
+                        <td>{{ $project->category->name ?? 'N/A' }}</td>
+                        <td>{{ $project->modeOfProcurement->name ?? 'N/A' }}</td>
+                        <td>{{ $project->sourceOfFund->name ?? 'N/A' }}</td>
+                        <td>{{ $project->endUser->name ?? 'N/A' }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">No app projects found.</td>
+                    </tr>
+                @endforelse
+            </tbody>
                 </div>
             </div>
         </div>
