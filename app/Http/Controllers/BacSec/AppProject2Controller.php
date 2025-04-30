@@ -29,7 +29,7 @@ class AppProject2Controller extends Controller
         
         $sources = SourceOfFund::all();
         $statuses = AppProjectStatus::all();
-        $projects = $query->with(['app', 'category', 'status', 'fund', 'endUser', 'office'])->get();
+        $projects = $query->with(['app', 'category', 'status', 'sourceOfFund', 'endUser', 'office'])->get();
     
         return view('bacsec.app_projects.index', compact('projects', 'sources', 'statuses'));
     }
@@ -71,6 +71,7 @@ class AppProject2Controller extends Controller
     
     public function show(AppProject $appProject)
     {
+        $project = AppProject::with(['endUser', 'category', 'modeOfProcurement', 'status', 'sourceOfFund'])->findOrFail($appProject->id);
         return view('bacsec.app_projects.show', compact('appProject'));
     }
 

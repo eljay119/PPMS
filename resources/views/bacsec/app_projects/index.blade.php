@@ -52,23 +52,27 @@
     </div>
 </div>
 
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped text-center align-middle">
     <thead>
         <tr>
-            <th>#</th>
-            <th>End User</th>
-            <th>PR Number</th>
-            <th>Project Title</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Remarks</th>
-            <th>Actions</th>
+            <th style="width: 5%;">
+                <input type="checkbox" id="selectAll" class="form-check-input">
+            </th>
+            <th style="width: 15%;">End User</th>
+            <th style="width: 10%;">Category</th>
+            <th style="width: 10%;">PR Number</th>
+            <th style="width: 20%;">Project Title</th>
+            <th style="width: 10%;">Amount</th>
+            <th style="width: 10%;">Mode of Procurement</th>
+            <th style="width: 10%;">Status</th>
+            <th style="width: 15%;">Remarks</th>
+            <th style="width: 10%;">Actions</th>
         </tr>
     </thead>
     <tbody>
         @if($projects->isEmpty())
             <tr>
-                <td colspan="9" class="text-center text-muted py-3">
+                <td colspan="8" class="text-center text-muted py-3">
                     <i class="fas fa-folder-open me-2"></i> No APP projects found.
                 </td>
             </tr>
@@ -78,13 +82,14 @@
                 <td>
                     <input type="checkbox" class="form-check-input project-checkbox" value="{{ $project->id }}">
                 </td>
-                <td>{{ $index + 1 }}</td>
-                <td>{{ $project->endUser->name ?? 'N/A' }}</td>
-                <td>{{ $project->pr_number ?? 'N/A' }}</td>
-                <td>{{ $project->title }}</td>
+                <td>{{ $project->endUser->name ?? '' }}</td>
+                <td>{{ $project->category->name ?? '' }}</td>
+                <td>{{ $project->pr_number ?? '' }}</td>
+                <td>{{ $project->title ?? '' }}</td>
                 <td>{{ number_format($project->abc, 2) }}</td>
-                <td>{{ $project->status->name ?? 'N/A' }}</td>
-                <td>{{ $project->remarks ?? 'N/A' }}</td>
+                <td>{{ $project->modeOfProcurement->name ?? '' }}</td>
+                <td>{{ $project->status->name ?? '' }}</td>
+                <td>{{ $project->remarks ?? '' }}</td>
                 <td>
                     <a href="{{ route('bacsec.app_projects.show', $project->id) }}" class="text-primary me-2" title="View">
                         <i class="fas fa-eye"></i>
@@ -100,6 +105,5 @@
             @endforeach
         @endif
     </tbody>
-
 </table>
 @endsection

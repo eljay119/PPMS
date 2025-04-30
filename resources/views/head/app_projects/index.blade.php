@@ -25,7 +25,6 @@
                 <th>Source of Fund</th>
                 <th>Category</th>
                 <th>Mode of Procurement</th>
-                <th>Type</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -34,15 +33,18 @@
             @foreach($projects as $project)
             <tr>
                 <td>{{ $project->id }}</td>
-                <td>{{ $project->end_user }}</td>
+                <td>{{ $project->endUser->name ?? '' }}</td>
                 <td>{{ $project->title }}</td>
-                <td>{{ number_format($project->amount, 2) }}</td>
-                <td>{{ $project->source_of_fund }}</td>
-                <td>{{ $project->category }}</td>
-                <td>{{ $project->procurement_mode }}</td>
-                <td>{{ $project->type }}</td>
-                <td>{{ $project->status }}</td>
-                <td><button class="btn btn-warning">Submit PR</button></td>
+                <td>{{ number_format($project->abc, 2) }}</td>
+                <td>{{ $project->sourceOfFund->name  }}</td>
+                <td>{{ $project->category->name ?? '' }}</td>
+                <td>{{ $project->modeOfProcurement->name ?? '' }}</td>
+                <td>{{ $project->status->name ?? '' }}</td>
+                <td>
+                    <button class="btn bg-transparent text-warning border-0" title="Submit PR" >
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </td>
             </tr>
             @endforeach
         </tbody>

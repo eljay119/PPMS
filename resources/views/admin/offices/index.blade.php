@@ -7,7 +7,7 @@
     <div class="card-body">
         <div class="d-flex justify-content-between mb-3">
             <h5>Offices</h5>
-            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#officeModal" id="addOfficeBtn">
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addOfficeModal" id="addOfficeBtn">
                 <i class="bi bi-plus-lg"></i> Add Office
             </button>
         </div>

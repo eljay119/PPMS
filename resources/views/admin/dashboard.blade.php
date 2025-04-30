@@ -42,7 +42,8 @@
             <tr>
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->role->name ?? 'No Role' }}</td>
-                <td>{{ $user->office ? $user->office->name : 'N/A' }}</td> <!-- Fix: Changed $user->offices to $user->office -->
+                <td>{{ optional($user->office)->name ?? '' }}</td>
+
                 <td>{{ $user->email }}</td>
                 <td>{{ $user->username }}</td>
             </tr>

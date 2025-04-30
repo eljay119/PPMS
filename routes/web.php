@@ -30,6 +30,7 @@ use App\Http\Controllers\BacSec\AppProject2Controller;
 use App\Http\Controllers\BacSec\AppProjectStatusController;
 
 use App\Http\Controllers\BudgetOfficer\AppProject3Controller;
+use App\Http\Controllers\BudgetOfficer\AppProject5Controller;
 
 use App\Http\Controllers\CampusDirector\AppProject4Controller;
 
@@ -123,21 +124,22 @@ Route::prefix('bacsec')->name('bacsec.')->group(function () {
 
     Route::get('app/{id}/consolidate', [AppController::class, 'consolidate'])->name('app.consolidate');
 
-    Route::resource('app_projects', AppProject2Controller::class)->only(['index']);
+    Route::resource('app_projects', AppProject2Controller::class);
 
     Route::resource('app_project_statuses', AppProjectStatusController::class);
 
     Route::post('app/{app}/merge', [AppController::class, 'mergeProjects'])->name('merge.projects');
-    // Route::post('/projects/merge', [ProjectController::class, 'merge'])->name('projects.merge');
 
+    Route::get('app_projects/{appProject}', [AppProject2Controller::class, 'show'])->name('app_projects.show');
 });
-
 
 // Budget Officer Management Routes
 Route::prefix('budget_officer')->name('budget_officer.')->group(function () {
-    Route::get('submitted_projects', [AppProject3Controller::class, 'index'])->name('submitted_projects.index');
-    Route::get('certified_projects', [AppProject3Controller::class, 'index'])->name('certified_projects.index');
+    Route::get('submitted_projects', [AppProject5Controller::class, 'index'])->name('submitted_projects.index');
 
+    Route::post('submitted_projects/certify', [AppProject5Controller::class, 'certify'])->name('submitted_projects.certify');
+
+    Route::get('certified_projects', [AppProject5Controller::class, 'certifiedProjects'])->name('certified_projects.index');
 });
 
 
@@ -147,7 +149,6 @@ Route::prefix('campus_director')->name('campus_director.')->group(function () {
     Route::get('endorsed_projects', [AppProject4Controller::class, 'index'])->name('endorsed_projects.index');
 
 });
-
 
 // Profile Management Routes
 Route::middleware('auth')->controller(ProfileController::class)->group(function () {

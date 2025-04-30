@@ -32,7 +32,7 @@ class PPMPController extends Controller
     {
         $user = Auth::user();
 
-        // Get the office assigned to the current Head user
+    
         $office = \App\Models\Office::where('user_id', $user->id)->first();
 
         if (!$office) {
@@ -65,11 +65,11 @@ class PPMPController extends Controller
             return back()->with('error', 'No office assigned to this user.');
         }
 
-        // Find an existing APP for the same fiscal year, or create a new one
+        
         $app = \App\Models\App::firstOrCreate([
             'year' => $request->fiscal_year
         ], [
-            'version_name' => 'Default Version', // You can modify this
+            'version_name' => 'Default Version', 
             'status_id' => 1,
             'prepared_id' => $user->id,
         ]);

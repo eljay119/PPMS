@@ -10,6 +10,7 @@ use App\Models\AppProjectStatus;
 use App\Models\SourceOfFund;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; 
 
 class AppProjectController extends Controller
 {
@@ -18,11 +19,12 @@ class AppProjectController extends Controller
         $this->middleware('auth');
     }
 
-    // Display a listing of APP Projects
     public function index()
     {
         $funds = SourceOfFund::all();
-        $projects = AppProject::with(['app', 'category', 'status', 'fund', 'endUser'])->get();
+        $projects = AppProject::with(['app', 'category', 'status', 'sourceOfFund', 'endUser'])
+        ->where('end_user_id', Auth::id())
+        ->get();
         return view('head.app_projects.index', compact('projects', 'funds'));
     }
 

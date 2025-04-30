@@ -9,8 +9,8 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        // Fetch all users along with their office data
-        $users = User::with('office')->get(); 
+        
+        $users = User::with(['role', 'office'])->get();
         
 
         return view('admin.dashboard', compact('users'));

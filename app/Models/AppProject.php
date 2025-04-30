@@ -69,5 +69,10 @@ class AppProject extends Model
     {
         return $this->belongsTo(PpmpProject::class, 'ppmp_project_id');
     }
+    public function projectType()
+    {
+        return $this->belongsTo(ProjectType::class, 'project_type_id');
+    }
+    
 
 }
