@@ -45,4 +45,10 @@ class PPMP extends Model
         return $this->belongsTo(ProjectType::class, 'type_id');
     }
 
+    public function files()
+    {
+        return $this->hasMany(PpmpFile::class);
+    }
+
+
 }

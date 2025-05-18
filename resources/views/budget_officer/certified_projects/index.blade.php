@@ -22,7 +22,6 @@
                 <th>Source of Fund</th>
                 <th>Category</th>
                 <th>Mode of Procurement</th>
-                <th>Type</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -44,8 +43,11 @@
                     <td>{{ $project->sourceOfFund->name ?? 'N/A' }}</td>
                     <td>{{ $project->category->name ?? 'N/A' }}</td>
                     <td>{{ $project->modeOfProcurement->name ?? 'N/A' }}</td>
-                    <td>{{ $project->type ?? 'N/A' }}</td>
                     <td>{{ $project->status->name ?? 'N/A' }}</td>
+                    <td>
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                            data-bs-target="#certifyModal{{ $project->id }}">Endorse</button>
+                    </td>
                 </tr>
                 @endforeach
             @endif

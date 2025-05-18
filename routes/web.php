@@ -33,9 +33,9 @@ use App\Http\Controllers\BudgetOfficer\AppProject3Controller;
 use App\Http\Controllers\BudgetOfficer\AppProject5Controller;
 
 use App\Http\Controllers\CampusDirector\AppProject4Controller;
+use App\Http\Controllers\CampusDirector\AppProject6Controller;
 
 use App\Http\Middleware\CheckRole;
-
 
 // Public Route
 Route::get('/', function () {
@@ -100,13 +100,20 @@ Route::prefix('admin')->middleware(['auth', CheckRole::class . ':admin'])->group
 
 // Head Management Routes
 Route::prefix('head')->name('head.')->middleware(['auth'])->group(function () {
+
+    Route::get('/notifications', [App\Http\Controllers\Head\AppProjectController::class, 'notifications'])->name('notifications');
     // PPMP Routes
     Route::resource('ppmps', PPMPController::class);
      // Handles index, show, store, update, destroy, etc.
     Route::put('/ppmps/{ppmp}/finalize', [PPMPController::class, 'finalize'])->name('ppmps.finalize');
+    Route::post('/ppmps/{ppmp}/upload', [PPMPController::class, 'upload'])->name('ppmps.upload');
+
 
     // Assigned APP Projects
     Route::get('/app-projects', [AppProjectController::class, 'index'])->name('app_projects.index');
+
+    Route::get('/app-projects/{appProject}', [AppProjectController::class, 'show'])->name('app_projects.show');
+
 
     // PPMP Projects Routes
     // Show all projects under a specific PPMP
@@ -116,12 +123,15 @@ Route::prefix('head')->name('head.')->middleware(['auth'])->group(function () {
     Route::post('/ppmp_projects', [PpmpProjectController::class, 'store'])->name('ppmp_projects.store');
     Route::put('/ppmp_projects/{id}', [PpmpProjectController::class, 'update'])->name('ppmp_projects.update');
     Route::delete('/ppmp_projects/{id}', [PpmpProjectController::class, 'destroy'])->name('ppmp_projects.destroy');
+    Route::get('/ppmps/{ppmp_id}', [PpmpProjectController::class, 'show'])->name('ppmp_projects.show'); 
+
 });
 
 // Bac Sec Management Routes
 Route::prefix('bacsec')->name('bacsec.')->group(function () {
     Route::resource('app', AppController::class);
 
+    Route::get('/bacsec/generate-report', [BacSecController::class, 'generateReport'])->name('bacsec.generateReport');
     Route::get('app/{id}/consolidate', [AppController::class, 'consolidate'])->name('app.consolidate');
 
     Route::resource('app_projects', AppProject2Controller::class);
@@ -131,6 +141,21 @@ Route::prefix('bacsec')->name('bacsec.')->group(function () {
     Route::post('app/{app}/merge', [AppController::class, 'mergeProjects'])->name('merge.projects');
 
     Route::get('app_projects/{appProject}', [AppProject2Controller::class, 'show'])->name('app_projects.show');
+
+    Route::get('app_projects/showToEdit/{id}', [AppProject2Controller::class, 'showToEdit'])->name('app_projects.edit');
+
+    Route::get('app_projects/showToAdd/{id}', [AppProject2Controller::class, 'showToAdd'])->name('app_projects.add');
+
+    Route::post('app_projects/savePr/{id}', [AppProject2Controller::class, 'savePr'])->name('app_projects.savePr');
+
+    Route::post('app_projects/saveEdit/{id}', [AppProject2Controller::class, 'saveEdit'])->name('app_projects.saveEdit');
+
+    Route::post('app-projects/update-status', [AppProject2Controller::class, 'bulkUpdateStatus'])->name('app_projects.bulkUpdateStatus');
+
+    Route::get('generate-report', [BacSecController::class, 'generateReport'])->name('generateReport');
+
+
+
 });
 
 // Budget Officer Management Routes
@@ -140,13 +165,18 @@ Route::prefix('budget_officer')->name('budget_officer.')->group(function () {
     Route::post('submitted_projects/certify', [AppProject5Controller::class, 'certify'])->name('submitted_projects.certify');
 
     Route::get('certified_projects', [AppProject5Controller::class, 'certifiedProjects'])->name('certified_projects.index');
+
+    Route::post('certify', [AppProject5Controller::class, 'certify'])->name('certify');
 });
 
 
 // Campus Director Management Routes
 Route::prefix('campus_director')->name('campus_director.')->group(function () {
     Route::get('certified_project', [AppProject4Controller::class, 'index'])->name('certified_project.index');
-    Route::get('endorsed_projects', [AppProject4Controller::class, 'index'])->name('endorsed_projects.index');
+
+    Route::get('endorsed_projects', [AppProject6Controller::class, 'index'])->name('endorsed_projects.index');
+
+    Route::post('endorse/{id}', [AppProject6Controller::class, 'endorse'])->name('endorse');
 
 });
 

@@ -25,6 +25,7 @@ class AppProject extends Model
         'fund_id',
         'end_user_id',
         'office_id',
+        'pr_no',
     ];
 
     public function app()
@@ -73,6 +74,18 @@ class AppProject extends Model
     {
         return $this->belongsTo(ProjectType::class, 'project_type_id');
     }
-    
+
+    public function fund()
+    {
+        return $this->belongsTo(SourceOfFund::class, 'source_of_fund_id');
+    }
+
+    public function statusHistories()
+    {
+        return $this->hasMany(AppProjectStatusHistory::class);
+    }
+
+
+        
 
 }

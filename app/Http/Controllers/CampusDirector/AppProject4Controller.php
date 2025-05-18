@@ -23,6 +23,17 @@ class AppProject4Controller extends Controller
     {
         $projects = AppProject::with(['app', 'category', 'status', 'fund', 'endUser'])->get();
 
+        $certifiedStatus = AppProjectStatus::where('name', 'Certified Available Funds')->first();
+
+        if (!$certifiedStatus) {
+            return redirect()->back()->with('error', 'The status "Certified Available Funds" does not exist.');
+        }
+
+        // Fetch projects with the "Certified Available Funds" status
+        $projects = AppProject::with(['endUser', 'sourceOfFund', 'category', 'modeOfProcurement', 'status'])
+            ->where('status_id', $certifiedStatus->id)
+            ->get();
+
         return view('campus_director.certified_project.index', compact('projects'));
     }
 

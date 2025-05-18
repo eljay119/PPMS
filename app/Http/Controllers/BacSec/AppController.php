@@ -163,4 +163,6 @@ class AppController extends Controller
         return $user ? $user->id : Auth::id();
     }
 
+    
+
 }

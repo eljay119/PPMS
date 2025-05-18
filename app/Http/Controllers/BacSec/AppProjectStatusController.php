@@ -5,6 +5,10 @@ namespace App\Http\Controllers\BacSec;
 use App\Http\Controllers\Controller;
 use App\Models\AppProjectStatus;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Notification;
+
+use App\Notifications\UpdateMadeNotification;
 
 class AppProjectStatusController extends Controller
 {
@@ -61,6 +65,12 @@ class AppProjectStatusController extends Controller
         ]);
 
         $appProjectStatus->update($request->all());
+
+        $headUsers = User::whereHas('role', fn($q) => $q->where('name', 'Head'))->get();
+        Notification::send($headUsers, new UpdateMadeNotification(
+            "App Project Status '{$appProjectStatus->name}' was updated by Bac Sec.",
+            route('bacsec.app_project_statuses.show', $appProjectStatus->id)
+        ));
 
         return redirect()->route('bacsec.app_project_statuses.index')->with('success', 'App Project Status updated successfully!');
     }

@@ -21,7 +21,16 @@ class AppProject5Controller extends Controller
     
     public function index()
     {
-        $projects = AppProject::with(['app', 'category', 'status', 'sourceOfFund', 'endUser', 'modeOfProcurement', 'projectType'])->get();
+        $prSubmittedStatusId = AppProjectStatus::where('name', 'PR Submitted')->first()->id;
+        if (!$prSubmittedStatusId) {
+            return redirect()->back()->with('error', 'The status "PR Submitted" does not exist.');
+        }
+        
+        $projects = AppProject::with(['app', 'category', 'status', 'sourceOfFund', 'endUser', 'modeOfProcurement', 'projectType'])
+        ->where('status_id', $prSubmittedStatusId)
+        ->whereNull('certified_at')
+        ->get();
+
         $funds = SourceOfFund::all();
 
         return view('budget_officer.submitted_projects.index', compact('projects', 'funds'));
@@ -35,19 +44,32 @@ class AppProject5Controller extends Controller
         ]);
     
         $project = AppProject::findOrFail($request->project_id);
-    
-        // Perform the certification logic (e.g., update a "certified_at" timestamp)
+
+        $certifiedStatus = AppProjectStatus::where('name', 'Certified Available Funds')->first();
+
+        if (!$certifiedStatus) {
+            return redirect()->back()->with('error', 'The status "Certified Available Funds" does not exist.');
+        }
+        
+        $project->status_id = $certifiedStatus->id;
         $project->certified_at = now();
         $project->save();
     
         return redirect()->route('budget_officer.submitted_projects.index')
             ->with('success', 'Project certified successfully!');
+
     }
 
     public function certifiedProjects()
     {
+        $certifiedStatus = AppProjectStatus::where('name', 'Certified Available Funds')->first();
+    
+        if (!$certifiedStatus) {
+            return redirect()->back()->with('error', 'The status "Certified Available Funds" does not exist.');
+        }
+    
         $projects = AppProject::with(['app', 'category', 'status', 'sourceOfFund', 'endUser', 'modeOfProcurement', 'projectType'])
-            ->whereNotNull('certified_at')
+            ->where('status_id', $certifiedStatus->id)
             ->get();
     
         return view('budget_officer.certified_projects.index', compact('projects'));

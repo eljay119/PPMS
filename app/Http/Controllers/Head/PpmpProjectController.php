@@ -10,6 +10,8 @@ use App\Models\ModeOfProcurement;
 use App\Models\PpmpProjectStatus;
 use App\Models\ProjectType;
 use App\Models\AppProject;
+use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -26,6 +28,7 @@ class PpmpProjectController extends Controller
     {
         $ppmp = PPMP::with('ppmpProjects')
                     ->findOrFail($ppmp_id);
+        
     
         return view('head.ppmp_projects.index', compact('ppmp'));
     }    
@@ -59,9 +62,8 @@ class PpmpProjectController extends Controller
         Log::info('Validated Data:', $validated);
     
         try {
-            // Retrieve PPMP record to get office_id and source_of_fund_id
             $ppmp = PPMP::findOrFail($request->ppmp_id);
-    
+        
             $project = PpmpProject::create([
                 'title' => $validated['title'],
                 'description' => $validated['description'],
@@ -70,19 +72,17 @@ class PpmpProjectController extends Controller
                 'mode_of_procurement_id' => $validated['mode_of_procurement_id'],
                 'type_id' => $validated['type_id'],
                 'ppmp_id' => $validated['ppmp_id'],
-                'office_id' => $ppmp->office_id,  
-                'source_of_fund_id' => $ppmp->source_of_fund_id, 
-                'status_id' => 9, 
+                'office_id' => $ppmp->office_id,
+                'source_of_fund_id' => $ppmp->source_of_fund_id,
+                'status_id' => 9,
                 'end_user' => $ppmp->office->user->id,
             ]);
-    
-            Log::info('PPMP Project Created:', ['id' => $project->id]);
-            return redirect()->route('head.ppmps.show', ['ppmp_id' => $request->ppmp_id])
-                ->with('success', 'PPMP Project created successfully!');
+        
+            return redirect()->back()->with('success', 'Project saved successfully.');
         } catch (\Exception $e) {
-            Log::error('PPMP Project Store Error:', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Failed to save project.');
+            return redirect()->back()->with('error', 'Failed to save project.');
         }
+        
     }
     
 
@@ -141,6 +141,25 @@ class PpmpProjectController extends Controller
         return redirect()->route('head.ppmps.show', $ppmp_id)
                          ->with('success', 'PPMP Project deleted successfully!');
 
+    }
+
+    public function updateStatus(Request $request, $projectId)
+    {
+        $project = PpmpProject::findOrFail($projectId);
+        $project->status = $request->status;
+        $project->save();
+
+        // Notify the Head user
+        $headUser = User::where('role', 'Head')->first(); // Adjust role logic as needed
+        if ($headUser) {
+            Notification::create([
+                'user_id' => $headUser->id,
+                'message' => "The status of project '{$project->title}' has been updated to '{$project->status}'.",
+                'link' => route('projects.show', $project->id),
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Project status updated successfully.');
     }
     
 }

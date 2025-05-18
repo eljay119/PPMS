@@ -129,6 +129,17 @@
     </div>
 </div>
 
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div class="toast align-items-center text-white bg-success border-0" id="successToast" role="alert">
+        <div class="d-flex">
+            <div class="toast-body">
+                {{ session('success') }}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
 <!-- View Modal -->
 <div class="modal fade" id="viewModal" tabindex="-1">
     <div class="modal-dialog">
@@ -220,4 +231,14 @@
         });
     });
 </script>
+
+    @if (session('success'))
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var toast = new bootstrap.Toast(document.getElementById('successToast'));
+            toast.show();
+        });
+    </script>
+    @endif
+
 @endsection

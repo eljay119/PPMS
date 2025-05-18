@@ -25,60 +25,97 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:users',
-                'role' => 'required|exists:roles,id',
-            ], 
-            [
-                'name.required' => 'Please provide your name.',
-                'email.required' => 'Please provide your email.',
-                'username.required'=> 'Please provide your username',
-                'role.required' => 'Please provide role',
-                'active' => 'nullable|boolean',
-            ]);
-                        
-            $data = User::create([
-                
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => 'bisucandijay',
-                'username' => $request->username,
-                'role_id' => $request->role,
-                'active' => $request->active ?? 1,
-            ]);
+        // Validate the request data
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'role' => 'required|exists:roles,id',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10048', // Validate image file
+        ], 
+        [
+            'name.required' => 'Please provide your name.',
+            'email.required' => 'Please provide your email.',
+            'username.required'=> 'Please provide your username',
+            'role.required' => 'Please provide role',
+            'profile_picture.image' => 'The profile picture must be an image.',
+            'profile_picture.mimes' => 'The profile picture must be a file of type: jpeg, png, jpg, gif, svg.',
+            'profile_picture.max' => 'The profile picture may not be greater than 2MB.',
+        ]);
 
-            error_log('Created Data: ' . print_r($data->toArray(), true));
+        // Handle profile picture upload
+        $filePath = null;
+        if ($request->hasFile('profile_picture')) {
+            $file = $request->file('profile_picture');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->move(public_path('uploads/profile_pictures/'), $filename);
+            $filePath = 'uploads/profile_pictures/' . $filename;
+        }
 
-            Log::info('Data created:', $data->toArray());
+        // Create the user with the uploaded profile picture path if available
+        $data = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => 'bisucandijay', // This should be securely hashed (not plain text)
+            'username' => $request->username,
+            'role_id' => $request->role,
+            'profile_pic' => $filePath,  // Save the file path to the database
+            'active' => $request->active ?? 1,
+        ]);
 
-            return redirect()->route('admin.users.index');
-        
+        // Log the created data (optional for debugging)
+        error_log('Created Data: ' . print_r($data->toArray(), true));
+        Log::info('Data created:', $data->toArray());
+
+        // Redirect to the users index page
+        return redirect()->route('admin.users.index');
     }
+
 
 
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'username' => 'required|string|max:255',
-            'role' => 'required|exists:roles,id',
-        ]);
+{
+    // Validate the incoming request
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $id,
+        'username' => 'required|string|max:255',
+        'role' => 'required|exists:roles,id',
+        'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate profile picture upload
+    ]);
 
+    // Find the user by ID
+    $user = User::findOrFail($id);
 
-        $user = User::findOrFail($id);
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->username = $request->username;
-        $user->role_id = $request->role;
-        $user->active = $request->active ?? 1;
+    // Update user information
+    $user->name = $request->name;
+    $user->email = $request->email;
+    $user->username = $request->username;
+    $user->role_id = $request->role;
+    $user->active = $request->active ?? 1;
 
-        $user->save();
+    // Handle profile picture update (if a new one is uploaded)
+    if ($request->hasFile('profile_picture')) {
+        // Delete the old profile picture if exists
+        if ($user->profile_picture && file_exists(public_path($user->profile_picture))) {
+            unlink(public_path($user->profile_picture));
+        }
 
-        return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
+        // Handle the new profile picture upload
+        $file = $request->file('profile_picture');
+        $extension = $file->getClientOriginalExtension();
+        $filename = time() . '.' . $extension;
+        $file->move(public_path('uploads/profile_pictures/'), $filename);
+        $user->profile_pic = 'uploads/profile_pictures/' . $filename;
     }
+
+    // Save the updated user
+    $user->save();
+
+    // Redirect with success message
+    return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
+}
+
 
     public function destroy($id)
     {

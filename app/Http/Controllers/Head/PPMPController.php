@@ -10,6 +10,7 @@ use App\Models\SourceOfFund;
 use App\Models\PpmpStatus;
 use App\Models\PpmpProjectStatus;
 use App\Models\ProjectType;
+use App\Models\PpmpFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
 use Exception;
@@ -132,6 +133,29 @@ class PPMPController extends Controller
 
         return redirect()->route('head.ppmps.index')->with('success', 'PPMP finalized successfully.');
     }
+
+    public function upload(Request $request, $ppmpId)
+{
+    $request->validate([
+        'ppmp_files.*' => 'required|file|mimes:pdf,doc,docx,xlsx,xls,jpg,jpeg,png|max:5120',
+    ]);
+
+    $ppmp = PPMP::findOrFail($ppmpId);
+
+    if ($request->hasFile('ppmp_files')) {
+        foreach ($request->file('ppmp_files') as $file) {
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/ppmp_files', $filename);
+
+            PpmpFile::create([
+                'ppmp_id' => $ppmp->id,
+                'filename' => $filename,
+            ]);
+        }
+    }
+
+    return back()->with('success', 'Files uploaded successfully.');
+}
 
 
 }

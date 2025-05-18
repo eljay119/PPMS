@@ -8,6 +8,7 @@ use App\Models\App;
 use App\Models\PpmpProjectCategory;
 use App\Models\AppProjectStatus;
 use App\Models\SourceOfFund;
+use App\Notifications\AppProjectUpdatedNotification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
@@ -64,6 +65,8 @@ class AppProjectController extends Controller
     // Show a specific APP Project
     public function show(AppProject $appProject)
     {
+        $project = AppProject::with(['endUser', 'category', 'modeOfProcurement', 'status', 'sourceOfFund', 'statusHistories.status', 'statusHistories.user'])
+                ->findOrFail($appProject->id);
         return view('head.app_projects.show', compact('appProject'));
     }
 
@@ -94,9 +97,21 @@ class AppProjectController extends Controller
             'fund_id' => 'required|exists:source_of_funds,id',
             'end_user_id' => 'required|exists:users,id',
         ]);
-
+    
         $appProject->update($request->all());
-
+    
+        // ✅ Notify the Head user
+        $headUser = User::whereHas('role', function ($query) {
+            $query->where('name', 'Head');
+        })->first();
+    
+        if ($headUser) {
+            $headUser->notify(new AppProjectUpdatedNotification(
+                "APP Project '{$appProject->title}' was updated.",
+                route('head.app_projects.show', $appProject->id)
+            ));
+        }
+    
         return redirect()->route('head.app_projects.index')->with('success', 'APP Project updated successfully!');
     }
 
@@ -106,4 +121,6 @@ class AppProjectController extends Controller
         $appProject->delete();
         return redirect()->route('head.app_projects.index')->with('success', 'APP Project deleted successfully!');
     }
+
+
 }
