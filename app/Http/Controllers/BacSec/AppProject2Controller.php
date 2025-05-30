@@ -12,6 +12,8 @@ use App\Models\AppProjectStatusHistory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\UpdateMadeNotification;
 
 class AppProject2Controller extends Controller
 {
@@ -187,6 +189,22 @@ class AppProject2Controller extends Controller
                 'updated_by' => $updatedBy, 
             ]); 
         }
+
+        // Notify all Head users
+    $headUsers = User::whereHas('role', function($q) {
+        $q->where('name', 'Head');
+    })->get();
+
+    foreach ($request->project_ids as $projectId) {
+        $project = AppProject::find($projectId);
+        if ($project) {
+            Notification::send($headUsers, new UpdateMadeNotification(
+                "APP Project '{$project->title}' status was updated by Bac Sec.",
+                route('head.app_projects.show', $project->id)
+            ));
+        }
+    }
+
 
         return redirect()->back()->with('success', 'Projects updated successfully.');
     }

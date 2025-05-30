@@ -10,13 +10,11 @@ class AppProjectUpdatedNotification extends Notification
 {
     use Queueable;
 
-    protected $message;
-    protected $link;
+    protected $appProject;
 
-    public function __construct($message, $link)
+    public function __construct($appProject)
     {
-        $this->message = $message;
-        $this->link = $link;
+        $this->appProject = $appProject;
     }
 
     public function via($notifiable)
@@ -27,8 +25,8 @@ class AppProjectUpdatedNotification extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            'message' => $this->message,
-            'link' => $this->link,
+            'message' => "APP Project '{$this->appProject->title}' was updated.",
+            'link' => route('head.app_projects.show', $this->appProject->id),
         ];
     }
 }

@@ -29,7 +29,7 @@ class AppProjectController extends Controller
         return view('head.app_projects.index', compact('projects', 'funds'));
     }
 
-    // Show the form for creating a new APP Project
+    
     public function create()
     {
         $apps = App::all();
@@ -41,7 +41,7 @@ class AppProjectController extends Controller
         return view('head.app_projects.create', compact('apps', 'categories', 'statuses', 'funds', 'users'));
     }
 
-    // Store a newly created APP Project
+    
     public function store(Request $request)
     {
         $request->validate([
@@ -100,17 +100,14 @@ class AppProjectController extends Controller
     
         $appProject->update($request->all());
     
-        // ✅ Notify the Head user
+       // Notify the Head user using custom Notification model
         $headUser = User::whereHas('role', function ($query) {
             $query->where('name', 'Head');
         })->first();
-    
+
         if ($headUser) {
-            $headUser->notify(new AppProjectUpdatedNotification(
-                "APP Project '{$appProject->title}' was updated.",
-                route('head.app_projects.show', $appProject->id)
-            ));
-        }
+        $headUser->notify(new AppProjectUpdatedNotification($appProject));
+    }
     
         return redirect()->route('head.app_projects.index')->with('success', 'APP Project updated successfully!');
     }

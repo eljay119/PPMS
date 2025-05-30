@@ -35,6 +35,8 @@ use App\Http\Controllers\BudgetOfficer\AppProject5Controller;
 use App\Http\Controllers\CampusDirector\AppProject4Controller;
 use App\Http\Controllers\CampusDirector\AppProject6Controller;
 
+use App\Http\Controllers\NotificationController;
+
 use App\Http\Middleware\CheckRole;
 
 // Public Route
@@ -99,6 +101,11 @@ Route::prefix('admin')->middleware(['auth', CheckRole::class . ':admin'])->group
 });
 
 // Head Management Routes
+
+Route::middleware('auth')->group(function () {
+    Route::get('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+});
+
 Route::prefix('head')->name('head.')->middleware(['auth'])->group(function () {
 
     Route::get('/notifications', [App\Http\Controllers\Head\AppProjectController::class, 'notifications'])->name('notifications');

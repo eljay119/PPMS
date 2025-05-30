@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Bac Sec Dashboard')
+@section('title', 'BAC Sec Dashboard')
 
 @section('page-title', '')
 
@@ -68,26 +68,7 @@
         </div>
 
     </div>
-    <div class="row">
-        <div class="col-xl-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-chart-area me-1"></i>
-                    Project Total by Quarter
-                </div>
-                <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
-            </div>
-        </div>
-        <div class="col-xl-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-chart-bar me-1"></i>
-                    Project Total by Mode of Procurement
-                </div>
-                <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
-            </div>
-        </div>
-    </div>
+
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <div>
@@ -96,7 +77,7 @@
             </div>
             <a href="{{ route('bacsec.generateReport') }}" class="btn btn-sm btn-primary"
                 style="font-weight: bold; font-size: 14px; text-transform: uppercase;">
-                <i class="fas fa-file-export"></i> Generate Report
+                <i class="fas fa-file-export"></i> Download
             </a>
         </div>
         <div class="card-body">

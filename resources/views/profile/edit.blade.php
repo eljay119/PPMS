@@ -51,11 +51,6 @@
                                             <i class="fas fa-key me-3"></i>
                                             <span>Password</span>
                                         </a>
-                                        <a href="#" class="nav-link mb-2 d-flex align-items-center"
-                                            data-bs-toggle="modal" data-bs-target="#notificationModal">
-                                            <i class="fas fa-bell me-3"></i>
-                                            <span>Notifications</span>
-                                        </a>
                                     </div>
 
                                     <hr class="my-4">
@@ -264,11 +259,11 @@
 
                     <!-- If no notifications -->
                     <!--
-                    <div class="text-center mt-4">
-                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-                        <h6 class="text-muted">No new notifications</h6>
-                    </div>
-                    -->
+                        <div class="text-center mt-4">
+                            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted">No new notifications</h6>
+                        </div>
+                        -->
                 </div>
             </div>
         </div>

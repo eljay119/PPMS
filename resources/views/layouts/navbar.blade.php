@@ -21,11 +21,12 @@
             $notificationCount = 0;
 
             if ($user && $user->role && $user->role->name === 'Head') {
-                $notifications = $user->unreadNotifications;
-                $notificationCount = $notifications->count();
+                // Show all notifications, not just unread
+                $notifications = $user->notifications;
+                $notificationCount = $user->unreadNotifications->count();
             }
         @endphp
-
+        
         @if ($user && $user->role && $user->role->name === 'Head')
             <li class="nav-item dropdown me-3">
                 <a class="nav-link text-white position-relative" id="notificationDropdown" href="#" role="button"
@@ -42,17 +43,21 @@
                     <li>
                         <h6 class="dropdown-header">Notifications</h6>
                     </li>
-                    @if ($notificationCount > 0)
+                    @if ($notifications->count() > 0)
                         @foreach ($notifications as $notification)
                             <li>
-                                <a class="dropdown-item" href="{{ $notification->data['link'] ?? '#' }}">
-                                    {{ $notification->data['message'] ?? 'No message' }}
+                                <a class="dropdown-item {{ is_null($notification->read_at) ? 'fw-bold' : '' }}"
+                                    href="{{ route('notifications.read', $notification->id) }}">
+                                    {{ $notification->data['message'] ?? '' }}
+                                    @if (is_null($notification->read_at))
+                                        <span class="badge bg-danger ms-2">New</span>
+                                    @endif
                                 </a>
                             </li>
                         @endforeach
                     @else
                         <li>
-                            <span class="dropdown-item text-muted">No new notifications</span>
+                            <span class="dropdown-item text-muted">No notifications</span>
                         </li>
                     @endif
                 </ul>

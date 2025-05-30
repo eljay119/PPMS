@@ -153,9 +153,6 @@
                 </a>
 
                 <div class="float-end">
-                    <a href="#" class="btn btn-outline-primary me-2">
-                        <i class="bi bi-printer"></i> Print
-                    </a>
                     <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#statusHistoryModal">
                         <i class="bi bi-clock-history"></i> Update History
                     </a>
